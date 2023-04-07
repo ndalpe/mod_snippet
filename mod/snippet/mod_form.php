@@ -59,17 +59,6 @@ class mod_snippet_mod_form extends moodleform_mod {
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
         $mform->addHelpButton('name', 'snippetname', 'mod_snippet');
 
-        // Wheter the snippet is private of not.
-        $mform->addElement('selectyesno', 'private', get_string('fieldname_private', 'mod_snippet'));
-        $mform->addHelpButton('private', 'private', 'snippet');
-        $mform->setType('private', PARAM_BOOL);
-        $mform->setDefault('private', 1);
-
-        // Programming language used in the snippet.
-        // language
-        // snippet
-
-
         // Adding the standard "intro" and "introformat" fields.
         if ($CFG->branch >= 29) {
             $this->standard_intro_elements();
@@ -79,8 +68,21 @@ class mod_snippet_mod_form extends moodleform_mod {
 
         // Adding the rest of mod_snippet settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('static', 'label1', 'snippetsettings', get_string('snippetsettings', 'mod_snippet'));
-        $mform->addElement('header', 'snippetfieldset', get_string('snippetfieldset', 'mod_snippet'));
+        $mform->addElement('header', 'snippetfieldset', get_string('snippetsettings', 'mod_snippet'));
+
+        // Wheter the snippet is private of not.
+        $mform->addElement('selectyesno', 'private', get_string('private', 'mod_snippet'));
+        $mform->addHelpButton('private', 'private', 'snippet');
+        $mform->setType('private', PARAM_BOOL);
+        $mform->setDefault('private', 1);
+
+        // Programming language used in the snippet.
+        $mform->addElement('text', 'language', get_string('language', 'mod_snippet'), array('size' => '64'));
+        $mform->setType('language', PARAM_TEXT);
+
+        // The snippet content.
+        $mform->addElement('textarea', 'snippet', get_string('snippet', 'mod_snippet'), array('row' => '10'));
+        $mform->setType('language', PARAM_TEXT);
 
         // Add standard grading elements.
         $this->standard_grading_coursemodule_elements();

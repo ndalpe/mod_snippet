@@ -31,5 +31,15 @@ $string['modulename_link'] = '/mod/snippets/view';
 $string['modulenameplural'] = 'Code Snippets';
 $string['pluginname'] = 'Code Snippet';
 $string['pluginname'] = 'Code Snippets';
+$string['pluginadministration'] = 'Snippet administration';
 $string['snippet:addinstance'] = 'addinstance';
 $string['snippet:view'] = 'view';
+
+// Snippet form field
+$string['snippetname'] = 'name';
+$string['snippetname_help'] = "Snippet's name.";
+$string['private'] = 'Private';
+$string['private_help'] = 'Wheter or not this snippet is private.';
+$string['snippetsettings'] = 'Snippet settings';
+$string['language'] = 'Programming language';
+$string['snippet'] = 'Snippet';

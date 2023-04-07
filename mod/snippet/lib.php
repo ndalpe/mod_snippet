@@ -54,6 +54,7 @@ function snippet_add_instance($moduleinstance, $mform = null) {
     global $DB;
 
     $moduleinstance->timecreated = time();
+    $moduleinstance->timemodified = time();
 
     $id = $DB->insert_record('snippet', $moduleinstance);
 
