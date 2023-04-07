@@ -60,4 +60,8 @@ $PAGE->set_context($modulecontext);
 
 echo $OUTPUT->header();
 
+$renderer = $PAGE->get_renderer('mod_snippet');
+$renderable = new \mod_snippet\output\view_page($cm);
+echo $renderer->render($renderable);
+
 echo $OUTPUT->footer();
