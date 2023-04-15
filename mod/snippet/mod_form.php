@@ -26,6 +26,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 
+use mod_snippet\local\languages;
+use mod_snippet\local\manager;
+
 /**
  * Module instance settings form.
  *
@@ -47,7 +50,7 @@ class mod_snippet_mod_form extends moodleform_mod {
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
         // Adding the standard "name" field.
-        $mform->addElement('text', 'name', get_string('snippetname', 'mod_snippet'), array('size' => '64'));
+        $mform->addElement('text', 'name', get_string('snippetname', manager::PLUGINNAME), array('size' => '64'));
 
         if (!empty($CFG->formatstringstriptags)) {
             $mform->setType('name', PARAM_TEXT);
@@ -57,7 +60,7 @@ class mod_snippet_mod_form extends moodleform_mod {
 
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
-        $mform->addHelpButton('name', 'snippetname', 'mod_snippet');
+        $mform->addHelpButton('name', 'snippetname', manager::PLUGINNAME);
 
         // Adding the standard "intro" and "introformat" fields.
         if ($CFG->branch >= 29) {
@@ -68,20 +71,29 @@ class mod_snippet_mod_form extends moodleform_mod {
 
         // Adding the rest of mod_snippet settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('header', 'snippetfieldset', get_string('snippetsettings', 'mod_snippet'));
+        $mform->addElement('header', 'snippetfieldset', get_string('snippetsettings', manager::PLUGINNAME));
 
         // Wheter the snippet is private of not.
-        $mform->addElement('selectyesno', 'private', get_string('private', 'mod_snippet'));
+        $mform->addElement('selectyesno', 'private', get_string('private', manager::PLUGINNAME));
         $mform->addHelpButton('private', 'private', 'snippet');
         $mform->setType('private', PARAM_BOOL);
         $mform->setDefault('private', 1);
 
         // Programming language used in the snippet.
-        $mform->addElement('text', 'language', get_string('language', 'mod_snippet'), array('size' => '64'));
+        $mform->addElement(
+            'autocomplete',
+            'language',
+            get_string('language', manager::PLUGINNAME),
+            languages::get_languages_from_files(),
+            [
+                'multiple' => false,
+                'noselectionstring' => get_string('select_language', manager::PLUGINNAME)
+            ]
+        );
         $mform->setType('language', PARAM_TEXT);
 
         // The snippet content.
-        $mform->addElement('textarea', 'snippet', get_string('snippet', 'mod_snippet'), array('row' => '10'));
+        $mform->addElement('textarea', 'snippet', get_string('snippet', manager::PLUGINNAME), array('row' => '10'));
         $mform->setType('language', PARAM_TEXT);
 
         // Add standard grading elements.
