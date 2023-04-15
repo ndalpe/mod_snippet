@@ -47,7 +47,16 @@ class renderer extends plugin_renderer_base {
      * @return string html for the page
      */
     public function render_view_page($page): string {
+        global $PAGE;
+
         $data = $page->export_for_template($this);
+
+        $PAGE->requires->js_call_amd('mod_snippet/highlight', 'highlightAll');
+        $PAGE->requires->js_call_amd(
+            'mod_snippet/inithljs', 'init',
+            array('language' => strtolower($data->language))
+        );
+
         return parent::render_from_template('mod_snippet/view_page', $data);
     }
 }

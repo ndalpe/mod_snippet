@@ -58,6 +58,8 @@ $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+$PAGE->requires->css('/mod/snippet/styles/agate.min.css');
+
 echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('mod_snippet');
