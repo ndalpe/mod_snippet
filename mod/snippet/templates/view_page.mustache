@@ -23,5 +23,25 @@
         "snippet" : "Code",
     }
 }}
-<p>{{ language }}</p>
-<pre><code class="language-{{ language }}">{{ snippet }}</code></pre>
+<div class="row">
+    <div class="col-md-3">
+        <h3>{{#str}} categories, mod_snippet {{/str}}</h3>
+        <input
+            type="button"
+            class="btn btn-secondary"
+            name="act_showcreatecategoryform"
+            id="showcreatecategoryform"
+            data-action="createcategorymodal"
+            value="+" />
+    </div>
+    <div class="col-md-9">
+        <p>{{ language }}</p>
+        <pre><code class="language-{{ language }}">{{ snippet }}</code></pre>
+    </div>
+</div>
+
+{{#js}}
+require(['mod_snippet/category'], function() {
+    NewCategory.init('[data-action=createcategorymodal]', {{contextid}});
+});
+{{/js}}

@@ -44,9 +44,12 @@ class view_page implements renderable, templatable {
      * @return stdClass
      */
     public function export_for_template(renderer_base $output): stdClass {
-        global $DB;
+        global $COURSE, $DB;
 
         $data = new stdClass();
+
+        $context = \context_course::instance($COURSE->id);
+        $data->contextid = $context->id;
 
         // Get the snippet content.
         $snippet = $DB->get_record('snippet', ['id' => $this->cm->instance]);

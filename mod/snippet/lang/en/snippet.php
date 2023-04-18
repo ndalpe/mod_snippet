@@ -44,6 +44,10 @@ $string['snippetsettings'] = 'Snippet settings';
 $string['language'] = 'Programming language';
 $string['select_language'] = 'Select a language';
 $string['snippet'] = 'Snippet';
+$string['categories'] = 'Categories';
+$string['newcategory_modal_title'] = 'New category';
+$string['fieldlabel_categoryname'] = 'Category name';
+$string['fieldlabel_categoryname_required'] = 'Category Name is required.';
 
 // Languages name
 $string['bash'] = 'Bash';
