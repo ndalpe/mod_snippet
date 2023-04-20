@@ -66,9 +66,9 @@ class categories {
     public static function has_category($userid):bool {
         global $DB;
 
-        $record = $DB->get_record('snippet_categories', ['userid' => $userid]);
+        $record = $DB->record_exists('snippet_categories', ['userid' => $userid]);
 
-        return $record !== false;
+        return $record;
     }
 
     /**
