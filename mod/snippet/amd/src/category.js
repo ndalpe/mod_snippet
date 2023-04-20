@@ -24,39 +24,52 @@
 
 import ModalForm from 'core_form/modalform';
 import Notification from 'core/notification';
+import { prefetchStrings } from 'core/prefetch';
 import { get_string as getString } from 'core/str';
-
-const selectors = {
-    showNewCategoryButton: '[data-action="createcategorymodal"]',
-};
+import * as snippetSelectors from 'mod_snippet/selectors';
 
 /**
- * Initialise and highlight.js and load the language syntax module.
+ * Modal form to create new category.
+ *
+ * @param {integer} cmid The module context id.
  */
-export const init = () => {
+export const init = (cmid) => {
 
-    const saveAsPresetButton = document.querySelector(selectors.showNewCategoryButton);
-    const modalForm = new ModalForm({
-        modalConfig: {
-            title: getString('newcategory_modal_title', 'mod_snippet'),
-            large: true,
-        },
-        args: { name: saveAsPresetButton.dataset.dataid },
-        saveButtonText: getString('ok', 'core_moodle'),
-        formClass: 'mod_snippet\\form\\category_add',
+    prefetchStrings('mod_snippet', [
+        'newcategory_modal_title',
+        'create_new_category',
+        'notification_newcategory_created'
+    ]);
+
+    const newCategoryButton = document.querySelector(snippetSelectors.actions.createNewCategory);
+    newCategoryButton.addEventListener('click', event => {
+        event.preventDefault();
+
+        const modalForm = new ModalForm({
+            modalConfig: {
+                title: getString('newcategory_modal_title', 'mod_snippet'),
+                large: true
+            },
+            args: { cmid: cmid },
+            saveButtonText: getString('create_new_category', 'mod_snippet'),
+            formClass: 'mod_snippet\\form\\create_category'
+        });
+
+        // Called when the form is submitted.
+        modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, event => {
+            if (event.detail.result) {
+                Notification.addNotification({
+                    type: 'success',
+                    message: getString('notification_newcategory_created', 'mod_snippet')
+                });
+            } else {
+                Notification.addNotification({
+                    type: 'error',
+                    message: event.detail.errors.join('<br>')
+                });
+            }
+        });
+
+        modalForm.show();
     });
-
-    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, event => {
-        if (event.detail.result) {
-            console.log('form sent');
-        } else {
-            Notification.addNotification({
-                type: 'error',
-                message: event.detail.errors.join('<br>')
-            });
-        }
-    });
-
-    modalForm.show();
-
 };

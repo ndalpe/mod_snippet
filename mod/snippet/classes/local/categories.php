@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_snippet course module viewed event.
+ * Categories management class.
  *
  * @package     mod_snippet
  * @copyright   2023 Nicolas Dalpe <ndalpe@gmail.com>
@@ -26,9 +26,6 @@ namespace mod_snippet\local;
 
 defined('MOODLE_INTERNAL') || die();
 
-use lang_string;
-use mod_snippet\local\manager;
-
 /**
  * The mod_snippet course module viewed event class.
  *
@@ -36,30 +33,41 @@ use mod_snippet\local\manager;
  * @copyright   2023 Nicolas Dalpe <ndalpe@gmail.com>
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class languages {
+class categories {
 
     /**
-     * Get all the language syntax available.
+     * Get the user categories.
      *
-     * @return array The list of languages.
+     * @param int $userid The user id.
+     *
+     * @return array The list of categories.
      */
-    public static function get_languages_from_files():array {
-        $languages = array();
+    public static function get_category_list($userid):array {
+        global $DB;
 
-        $languageslibrary = __DIR__ . '/../../amd/build/languages/';
+        $categories = array();
 
-        // Get all the language syntax files.
-        $files = array_diff(scandir($languageslibrary), array('..', '.'));
+        $records = $DB->get_records('snippet_categories', ['userid' => $userid], 'name ASC');
 
-        // Remove the .map files.
-        $files = array_filter($files, fn ($file) => str_contains($file, '.map') ? false : $file);
-
-        foreach ($files as $file) {
-            $content = file_get_contents($languageslibrary . $file);
-            preg_match('/^define\(\"(mod_snippet\/languages\/([a-z]+))/i', $content, $matches);
-            // 2 - contains the language name.
-            $languages[$matches[2]] = new lang_string($matches[2], manager::PLUGIN_NAME);
+        foreach ($records as $record) {
+            $categories[$record->id] = $record->name;
         }
-        return $languages;
+
+        return $categories;
+    }
+
+    /**
+     * Check if the user has at least one category.
+     *
+     * @param int $userid The user id.
+     *
+     * @return bool True if the user has at least one category.
+     */
+    public static function has_category($userid):bool {
+        global $DB;
+
+        $record = $DB->get_record('snippet_categories', ['userid' => $userid]);
+
+        return $record !== false;
     }
 }

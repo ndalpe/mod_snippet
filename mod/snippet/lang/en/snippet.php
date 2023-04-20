@@ -44,10 +44,17 @@ $string['snippetsettings'] = 'Snippet settings';
 $string['language'] = 'Programming language';
 $string['select_language'] = 'Select a language';
 $string['snippet'] = 'Snippet';
+
+// Categories.
+$string['general'] = 'General';
+$string['select_category'] = 'Select a category';
+$string['add_first_category'] = 'Add your first category';
 $string['categories'] = 'Categories';
 $string['newcategory_modal_title'] = 'New category';
 $string['fieldlabel_categoryname'] = 'Category name';
-$string['fieldlabel_categoryname_required'] = 'Category Name is required.';
+$string['fieldlabel_categoryname_required'] = 'Category name is required.';
+$string['create_new_category'] = 'Create new category';
+$string['notification_newcategory_created'] = 'New category created successfully.';
 
 // Languages name
 $string['bash'] = 'Bash';

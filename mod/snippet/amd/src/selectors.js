@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,26 +14,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The mod_snippet general use object.
+ * Snippet's HTML selectors.
  *
- * @package     mod_snippet
+ * @module      mod_snippet/selectors
  * @copyright   2023 Nicolas Dalpe <ndalpe@gmail.com>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace mod_snippet\local;
+/**
+ * Selectors for the mod snippet module.
+ *
+ * @property {Object} actions Action buttons.
+ */
+const SELECTORS = {
+    actions: {
+        createNewCategory: '[data-action="create-new-category"]'
+    }
+};
 
-defined('MOODLE_INTERNAL') || die();
-
-class manager {
-
-    /**
-     * Full plugin name.
-     */
-    const PLUGIN_NAME = 'mod_snippet';
-
-    /**
-     * The module name.
-     */
-    const MODULE_NAME = 'snippet';
-}
+export default SELECTORS;

@@ -21,27 +21,25 @@
     {
         "language" : "php",
         "snippet" : "Code",
+        "categories" : "category"
     }
 }}
 <div class="row">
     <div class="col-md-3">
-        <h3>{{#str}} categories, mod_snippet {{/str}}</h3>
-        <input
-            type="button"
-            class="btn btn-secondary"
-            name="act_showcreatecategoryform"
-            id="showcreatecategoryform"
-            data-action="createcategorymodal"
-            value="+" />
+        <h3>{{#str}} categories, mod_snippet {{/str}} <input type="button" class="btn btn-secondary" data-action="create-new-category" value="+" /></h3>
+        {{> mod_snippet/category_menu_items }}
     </div>
     <div class="col-md-9">
+        {{#snippet}}
         <p>{{ language }}</p>
         <pre><code class="language-{{ language }}">{{ snippet }}</code></pre>
+        {{/snippet}}
     </div>
 </div>
-
+{{#snippet}}
 {{#js}}
-require(['mod_snippet/category'], function() {
-    NewCategory.init('[data-action=createcategorymodal]', {{contextid}});
+require(['mod_snippet/category'], function(category) {
+    category.init({{cmid}});
 });
 {{/js}}
+{{/snippet}}

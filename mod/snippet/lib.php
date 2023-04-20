@@ -51,7 +51,22 @@ function snippet_supports($feature) {
  * @return int The id of the newly inserted record.
  */
 function snippet_add_instance($moduleinstance, $mform = null) {
-    global $DB;
+    global $DB, $USER;
+
+    // If categoryid is not equal to a number, the create a new category.
+    if (!is_numeric($moduleinstance->categoryid)) {
+        $category = new \stdClass();
+        $category->userid = $USER->id;
+        $category->name = $moduleinstance->categoryid;
+        $category->timecreated = time();
+        $category->timemodified = time();
+
+        $moduleinstance->categoryid = $DB->insert_record('snippet_categories', $category);
+    } else {
+        $moduleinstance->categoryid = (int) $moduleinstance->categoryid;
+    }
+
+    $moduleinstance->userid = $USER->id;
 
     $moduleinstance->timecreated = time();
     $moduleinstance->timemodified = time();

@@ -41,23 +41,28 @@ class view_page implements renderable, templatable {
     /**
      * Export this data so it can be used as the context for a mustache template.
      *
-     * @return stdClass
+     * @return stdClass $data The data to be used in the template.
      */
     public function export_for_template(renderer_base $output): stdClass {
-        global $COURSE, $DB;
+        global $DB, $USER;
 
+        // Data for the template.
         $data = new stdClass();
 
-        $context = \context_course::instance($COURSE->id);
-        $data->contextid = $context->id;
+        // The snippet course module id.
+        $data->cmid = $this->cm->id;
 
         // Get the snippet content.
         $snippet = $DB->get_record('snippet', ['id' => $this->cm->instance]);
-
         if ($snippet !== false) {
             $data->language = $snippet->language;
             $data->snippet = $snippet->snippet;
         }
+
+        // Get all the snippet categories for the given user.
+        $data->categories = array_values(
+            $DB->get_records('snippet_categories', ['userid' => $USER->id])
+        );
 
         return $data;
     }

@@ -39,11 +39,23 @@ class create_category extends dynamic_form {
      * @throws moodle_exception
      */
     public function process_dynamic_submission(): array {
-        global $CFG;
+        global $DB, $USER;
+
         $context = $this->get_context_for_dynamic_submission();
-        $returnurl = new moodle_url('/mod/snippet/view.php', [
-            'id' => $context->instanceid
-        ]);
+
+        $data = $this->get_data();
+
+        $newcategory = new \stdClass();
+        $newcategory->name = $data->categoryname;
+        $newcategory->userid = $USER->id;
+        $newcategory->timecreated = $newcategory->timemodified = time();
+
+        $newcategoryid = $DB->insert_record('snippet_categories', $newcategory);
+
+        $returnurl = new moodle_url(
+            '/mod/' . manager::MODULE_NAME . '/view.php',
+            ['id' => $context->instanceid]
+        );
         return [
             'result' => true,
             'url' => $returnurl->out(false)
@@ -51,14 +63,13 @@ class create_category extends dynamic_form {
     }
 
     /**
-     * Get context
+     * Get context.
      *
      * @return context
      */
     protected function get_context_for_dynamic_submission(): context {
         $cmid = $this->optional_param('cmid', null, PARAM_INT);
-        $cm = get_coursemodule_from_id('data', $cmid);
-        $context = \context_module::instance($cm->id);
+        $context = \context_module::instance($cmid);
         return $context;
     }
 
@@ -81,9 +92,9 @@ class create_category extends dynamic_form {
      * @throws moodle_exception
      */
     protected function check_access_for_dynamic_submission(): void {
-        // if (!has_capability('mod/data:managetemplates', $this->get_context_for_dynamic_submission())) {
-        //     throw new moodle_exception('importpresetmissingcapability', 'data');
-        // }
+        if (!has_capability('mod/' . manager::MODULE_NAME . ':view', $this->get_context_for_dynamic_submission())) {
+            throw new moodle_exception('createcategorymissingcapability', manager::MODULE_NAME);
+        }
     }
 
     /**
@@ -93,7 +104,7 @@ class create_category extends dynamic_form {
      */
     protected function get_page_url_for_dynamic_submission(): moodle_url {
         $cmid = $this->optional_param('cmid', null, PARAM_INT);
-        return new moodle_url('/mod/snippet/view.php', ['id' => $cmid]);
+        return new moodle_url('/mod/' . manager::MODULE_NAME . '/view.php', ['id' => $cmid]);
     }
 
     /**
@@ -103,12 +114,15 @@ class create_category extends dynamic_form {
      */
     protected function definition() {
         $mform = $this->_form;
+
         $mform->addElement('hidden', 'cmid');
         $mform->setType('cmid', PARAM_INT);
 
-        // Category name.
-        $mform->addElement('text', 'categoryname', get_string('fieldlabel_categoryname', 'snippet'));
-        $mform->setType('name', PARAM_TEXT);
-        $mform->addRule('name', get_string('fieldlabel_categoryname_required', manager::PLUGINNAME), 'required', null, 'client');
+        $mform->addElement('text', 'categoryname', get_string('fieldlabel_categoryname', manager::PLUGIN_NAME));
+        $mform->setType('categoryname', PARAM_TEXT);
+
+        // Category name is required.
+        $errormessage = get_string('fieldlabel_categoryname_required', manager::PLUGIN_NAME);
+        $mform->addRule( 'categoryname', $errormessage, 'required', null, 'client');
     }
 }
