@@ -21,11 +21,33 @@
     {
     "categories" : {
         "id": "category id",
-        "name": "category name"
+        "name": "category name",
+        "count": "number of snippets in category",
+        "hasnosnippet": "true if category has no snippets"
     }
     }
 }}
 
+<div class="list-group">
 {{#categories}}
-<a href="mod/snippet/view.php?id={{cmid}}&categoryid={{id}}">{{name}}</a><br />
+
+{{^hasnosnippet}}
+    <a href="/mod/snippet/view.php?id={{cmid}}&categoryid={{id}}" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            {{name}}
+            <span class="badge badge-secondary rounded-pill font-weight-normal mt-2">{{count}}</span>
+        </div>
+    </a>
+{{/hasnosnippet}}
+
+{{#hasnosnippet}}
+    <a class="list-group-item list-group-item-action disabled">
+        <div class="d-flex w-100 justify-content-between">
+            {{name}}
+            <span class="badge badge-light rounded-pill font-weight-normal mt-2">{{count}}</span>
+        </div>
+    </a>
+{{/hasnosnippet}}
+
 {{/categories}}
+</div>

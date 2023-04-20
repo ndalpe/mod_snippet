@@ -70,4 +70,17 @@ class categories {
 
         return $record !== false;
     }
+
+    /**
+     * Get the snippet count for a given category.
+     *
+     * @param int $categoryid The category id.
+     *
+     * @return int The snippet count.
+     */
+    public static function get_snippet_count($categoryid):int {
+        global $DB;
+
+        return $DB->count_records('snippet', ['categoryid' => $categoryid]);
+    }
 }

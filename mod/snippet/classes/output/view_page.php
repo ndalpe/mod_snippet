@@ -29,6 +29,8 @@ use renderer_base;
 use templatable;
 use stdClass;
 
+use mod_snippet\local\categories;
+
 class view_page implements renderable, templatable {
 
     /** @var stdClass $cm The course module object. */
@@ -63,6 +65,14 @@ class view_page implements renderable, templatable {
         $data->categories = array_values(
             $DB->get_records('snippet_categories', ['userid' => $USER->id])
         );
+
+        foreach ($data->categories as $key => $category) {
+            // Get the snippet count for each category.
+            $data->categories[$key]->count = categories::get_snippet_count($category->id);
+
+            // If the category contains no snippet, set hasnosnippet to true.
+            $data->categories[$key]->hasnosnippet = ($data->categories[$key]->count == 0);
+        }
 
         return $data;
     }
