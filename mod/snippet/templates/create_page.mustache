@@ -13,15 +13,16 @@
     <http: //www.gnu.org/licenses />.
 }}
 {{!
-    @template mod_snippet/view_page
+    @template mod_snippet/create_page
 
-    This template renders the view page content.
+    This template renders the create snip page content.
 
     Example context (json):
     {
-        "language" : "php",
-        "snippet" : "Code",
-        "categories" : "category"
+        "language"   : "php",
+        "snippet"    : "The scip code",
+        "categories" : "Nav category",
+        "form"       : "create snippet form"
     }
 }}
 <div class="row">
@@ -30,23 +31,6 @@
         {{> mod_snippet/category_menu_items }}
     </div>
     <div class="col-md-9">
-        {{#snippet}}
-        <div class="row">
-            <div class="col-md-8">
-                <h4>{{ display_language }}</h4>
-            </div>
-            <div class="col-md-4 d-flex justify-content-end">
-                <a href="/mod/snippet/create.php?id={{cmid}}" class="btn btn-secondary">{{#str}} btn_create_snippet, mod_snippet {{/str}}</a>
-            </div>
-        </div>
-        <pre><code class="language-{{ language }}">{{ snippet }}</code></pre>
-        {{/snippet}}
+        {{{form}}}
     </div>
 </div>
-{{#snippet}}
-{{#js}}
-require(['mod_snippet/category'], function(category) {
-    category.init({{cmid}});
-});
-{{/js}}
-{{/snippet}}

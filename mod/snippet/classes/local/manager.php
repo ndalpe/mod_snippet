@@ -37,4 +37,35 @@ class manager {
      * The module name.
      */
     const MODULE_NAME = 'snippet';
+
+    /**
+     * Ge the ids for the page URL.
+     *
+     * @return array $ids The ids for URL.
+     */
+    public static function get_param_for_url():array {
+        $formids = self::get_param_from_url();
+
+        // Remove the key that are equal to 0.
+        $urlids = array_filter($formids, function($value) {
+            return $value !== 0;
+        });
+
+        return $urlids;
+    }
+
+    /**
+     * Get the ids for the snip form.
+     *
+     * @return array $snipformids The ids from URL for the snip form.
+     */
+    public static function get_param_from_url():array {
+        $snipformids = array(
+            'id' => optional_param('id', 0, PARAM_INT),
+            'snipid' => optional_param('snipid', 0, PARAM_INT),
+            'categoryid' => optional_param('categoryid', 0, PARAM_INT),
+        );
+
+        return $snipformids;
+    }
 }

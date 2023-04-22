@@ -35,9 +35,13 @@ $string['pluginadministration'] = 'Snippet administration';
 $string['snippet:addinstance'] = 'addinstance';
 $string['snippet:view'] = 'view';
 
+$string['btn_create_snippet'] = 'Create new snippet';
+
 // Snippet form field
 $string['snippetname'] = 'name';
 $string['snippetname_help'] = "Snippet's name.";
+$string['snippetdesc'] = 'Description';
+$string['snippetdesc_help'] = "Snippet's description.";
 $string['private'] = 'Private';
 $string['private_help'] = 'Wheter or not this snippet is private.';
 $string['snippetsettings'] = 'Snippet settings';

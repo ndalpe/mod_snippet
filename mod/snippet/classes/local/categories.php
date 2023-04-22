@@ -26,6 +26,8 @@ namespace mod_snippet\local;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_snippet\local\snips;
+
 /**
  * The mod_snippet course module viewed event class.
  *
@@ -36,24 +38,57 @@ defined('MOODLE_INTERNAL') || die();
 class categories {
 
     /**
-     * Get the user categories.
+     * Get the user categories for a given user.
      *
      * @param int $userid The user id.
      *
      * @return array The list of categories.
      */
-    public static function get_category_list($userid):array {
+    public static function get_category_list_for_user(int $userid):array {
         global $DB;
-
-        $categories = array();
 
         $records = $DB->get_records('snippet_categories', ['userid' => $userid], 'name ASC');
 
-        foreach ($records as $record) {
-            $categories[$record->id] = $record->name;
-        }
+        return $records;
+    }
+
+    /**
+     * Get a list of categories, formated for <select> menu, for a given user.
+     *
+     * @param int $userid The user id.
+     *
+     * @return array The list of categories.
+     */
+    public static function get_category_list_for_input(int $userid):array {
+        global $DB;
+
+        $categories = $DB->get_records_menu(
+            'snippet_categories', ['userid' => $userid], 'name ASC', 'id, name'
+        );
 
         return $categories;
+    }
+
+    /**
+     * Get a list of categories, formated for nav menu, for a given user.
+     *
+     * @param int $userid The user id.
+     *
+     * @return array The list of categories.
+     */
+    public static function get_category_list_for_nav(int $userid):array {
+
+        $categories = self::get_category_list_for_user($userid);
+
+        foreach ($categories as $key => $category) {
+            // Get the snippet count for each category.
+            $categories[$key]->count = snips::get_snip_count($category->id);
+
+            // If the category contains no snippet, set hasnosnippet to true.
+            $categories[$key]->hasnosnippet = ($categories[$key]->count == 0);
+        }
+
+        return array_values($categories);
     }
 
     /**
@@ -69,18 +104,5 @@ class categories {
         $record = $DB->record_exists('snippet_categories', ['userid' => $userid]);
 
         return $record;
-    }
-
-    /**
-     * Get the snippet count for a given category.
-     *
-     * @param int $categoryid The category id.
-     *
-     * @return int The snippet count.
-     */
-    public static function get_snippet_count($categoryid):int {
-        global $DB;
-
-        return $DB->count_records('snippet', ['categoryid' => $categoryid]);
     }
 }

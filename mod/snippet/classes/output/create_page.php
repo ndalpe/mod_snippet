@@ -24,37 +24,24 @@
 
 namespace mod_snippet\output;
 
-use lang_string;
 use renderable;
 use renderer_base;
 use templatable;
 use stdClass;
 
 use mod_snippet\local\categories;
-use mod_snippet\local\manager;
 
-class view_page implements renderable, templatable {
+class create_page implements renderable, templatable {
 
     /** @var stdClass $cm The course module object. */
     private $cm = null;
 
-    /** @var stdClass $cm The catefory id. */
-    private $categoryid = null;
+    /** @var str $form The rendered (HTML) snip form. */
+    private $form = null;
 
-    /** @var stdClass $cm The snip id. */
-    private $snipid = null;
-
-    public function __construct($cm, $paramfromurl) {
-
+    public function __construct(stdClass $cm, string $form) {
         $this->cm = $cm;
-
-        if (isset($paramfromurl['categoryid'])) {
-            $this->categoryid = $paramfromurl['categoryid'];
-        }
-
-        if (isset($paramfromurl['snipid'])) {
-            $this->snipid = $paramfromurl['snipid'];
-        }
+        $this->form = $form;
     }
 
     /**
@@ -71,16 +58,12 @@ class view_page implements renderable, templatable {
         // The snippet course module id.
         $data->cmid = $this->cm->id;
 
-        // Get the snip content.
-        $snip = $DB->get_record('snippet_snips', ['id' => $this->snipid]);
-        if ($snip !== false) {
-            $data->display_language = new lang_string($snip->language, manager::PLUGIN_NAME);
-            $data->language = $snip->language;
-            $data->snippet = $snip->snippet;
-        }
+        // Set the rendered form in the template.
+        $data->form = $this->form;
 
         // Get all the snippet categories for the given user.
         $data->categories = categories::get_category_list_for_nav($USER->id);
+
         return $data;
     }
 }
