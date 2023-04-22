@@ -35,10 +35,9 @@ $capabilities = [
             'manager' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
-            'student' => CAP_ALLOW,
-        ],
+            'student' => CAP_ALLOW
+        ]
     ],
-
     'mod/snippet:view' => [
         'captype' => 'view',
         'contextlevel' => CONTEXT_MODULE,
@@ -46,7 +45,27 @@ $capabilities = [
             'manager' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
             'teacher' => CAP_ALLOW,
-            'student' => CAP_ALLOW,
-        ],
+            'student' => CAP_ALLOW
+        ]
+    ],
+    'mod/snippet:addsnip' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'student' => CAP_ALLOW
+        ]
+    ],
+    'mod/snippet:addcategory' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'student' => CAP_ALLOW
+        ]
     ],
 ];

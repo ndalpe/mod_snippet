@@ -34,8 +34,10 @@ $string['pluginname'] = 'Code Snippets';
 $string['pluginadministration'] = 'Snippet administration';
 $string['snippet:addinstance'] = 'addinstance';
 $string['snippet:view'] = 'view';
+$string['snippet:addsnip'] = 'Add new snip.';
+$string['snippet:addcategory'] = 'Add new category.';
 
-$string['btn_create_snippet'] = 'Create new snippet';
+$string['btn_create_snippet'] = 'Create new snip';
 
 // Snippet form field
 $string['snippetname'] = 'name';

@@ -26,8 +26,7 @@
 }}
 <div class="row">
     <div class="col-md-3">
-        <h3>{{#str}} categories, mod_snippet {{/str}} <input type="button" class="btn btn-secondary" data-action="create-new-category" value="+" /></h3>
-        {{> mod_snippet/category_menu_items }}
+        {{> mod_snippet/category_nav }}
     </div>
     <div class="col-md-9">
         {{#snippet}}
@@ -36,7 +35,9 @@
                 <h4>{{ display_language }}</h4>
             </div>
             <div class="col-md-4 d-flex justify-content-end">
+                {{#cap_addsnip}}
                 <a href="/mod/snippet/create.php?id={{cmid}}" class="btn btn-secondary">{{#str}} btn_create_snippet, mod_snippet {{/str}}</a>
+                {{/cap_addsnip}}
             </div>
         </div>
         <pre><code class="language-{{ language }}">{{ snippet }}</code></pre>

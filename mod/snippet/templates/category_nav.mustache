@@ -13,23 +13,25 @@
     <http: //www.gnu.org/licenses />.
 }}
 {{!
-    @template mod_snippet/create_page
+    @template mod_snippet/category_menu_items
 
-    This template renders the create snip page content.
+    This template renders the category menu items.
 
     Example context (json):
     {
-        "language"   : "php",
-        "snippet"    : "The scip code",
-        "categories" : "Nav category",
-        "form"       : "create snippet form"
+    "categories" : {
+        "id": "category id",
+        "name": "category name",
+        "count": "number of snippets in category",
+        "hasnosnippet": "true if category has no snippets"
+    }
     }
 }}
-<div class="row">
-    <div class="col-md-3">
-        {{> mod_snippet/category_nav }}
-    </div>
-    <div class="col-md-9">
-        {{{form}}}
-    </div>
-</div>
+
+<h3>
+    {{#str}} categories, mod_snippet {{/str}}
+    {{#cap_addcategory}}
+    <input type="button" class="btn btn-secondary" data-action="create-new-category" value="+" />
+    {{/cap_addcategory}}
+</h3>
+{{> mod_snippet/category_nav_items }}

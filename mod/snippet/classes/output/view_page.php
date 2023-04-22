@@ -24,11 +24,12 @@
 
 namespace mod_snippet\output;
 
+use context_module;
 use lang_string;
 use renderable;
 use renderer_base;
-use templatable;
 use stdClass;
+use templatable;
 
 use mod_snippet\local\categories;
 use mod_snippet\local\manager;
@@ -44,9 +45,14 @@ class view_page implements renderable, templatable {
     /** @var stdClass $cm The snip id. */
     private $snipid = null;
 
+    /** @var context_module $context The module context. */
+    private $context = null;
+
     public function __construct($cm, $paramfromurl) {
 
         $this->cm = $cm;
+
+        $this->context = context_module::instance($this->cm->id);
 
         if (isset($paramfromurl['categoryid'])) {
             $this->categoryid = $paramfromurl['categoryid'];
@@ -70,6 +76,12 @@ class view_page implements renderable, templatable {
 
         // The snippet course module id.
         $data->cmid = $this->cm->id;
+
+        // Can the current user add a snip?
+        $data->cap_addsnip = has_capability('mod/snippet:addsnip', $this->context);
+
+        // Can the current user add a category?
+        $data->cap_addcategory = has_capability('mod/snippet:addcategory', $this->context);
 
         // Get the snip content.
         $snip = $DB->get_record('snippet_snips', ['id' => $this->snipid]);
