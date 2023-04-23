@@ -36,6 +36,15 @@
         {{> mod_snippet/category_nav }}
     </div>
     <div class="col-md-9">
+
+        {{#displaylist}}
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-end">
+                {{> mod_snippet/components/btn_create_snip }}
+            </div>
+        </div>
+        {{/displaylist}}
+
         {{! Display an individual snip. }}
         {{#snip}}
             {{> mod_snippet/snips/snip }}

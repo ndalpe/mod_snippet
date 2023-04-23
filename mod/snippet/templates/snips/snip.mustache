@@ -27,12 +27,30 @@
 }}
 <div class="row">
     <div class="col-md-8">
+    {{^displaylist}}
+        <h3>{{name}}</h3>
+    {{/displaylist}}
+    {{#displaylist}}
         <h4>{{ display_language }}</h4>
+    {{/displaylist}}
     </div>
+
     <div class="col-md-4 d-flex justify-content-end">
-        {{#cap_addsnip}}
-        <a href="/mod/snippet/create.php?id={{cmid}}" class="btn btn-secondary">{{#str}} btn_create_snippet, mod_snippet {{/str}}</a>
-        {{/cap_addsnip}}
+        {{^displaylist}}
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-end">
+                {{> mod_snippet/components/btn_create_snip }}
+            </div>
+        </div>
+        {{/displaylist}}
+
+        {{#displaylist}}
+        {{> mod_snippet/components/btn_view_full_snip }}
+        {{/displaylist}}
     </div>
 </div>
-<pre><code class="language-{{ language }}">{{{snippet}}}</code></pre>
+<div class="row">
+    <div class="col-md-12">
+        <pre><code class="language-{{ language }}">{{{snippet}}}</code></pre>
+    </div>
+</div>
