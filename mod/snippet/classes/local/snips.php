@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 use core_analytics\user;
 use stdClass;
+use lang_string;
 
 /**
  * Class to manage snips.
@@ -164,6 +165,11 @@ class snips {
         $snips = $DB->get_records(
             'snippet_snips', ['userid' => $userid, 'categoryid' => $categoryid], 'timecreated DESC'
         );
+
+        // Add the display language key.
+        foreach ($snips as $snip) {
+            $snip->display_language = new lang_string($snip->language, manager::PLUGIN_NAME);
+        }
 
         return $snips;
     }

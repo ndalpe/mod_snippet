@@ -30,17 +30,18 @@ import hljs from 'mod_snippet/highlight';
  * @param {array} languages The languages used in the snip or list of snips.
  */
 export const init = (languages) => {
-    console.log(languages);
-    // import('mod_snippet/highlight').then((hljs) => {
+    for (const language of languages) {
 
-        for (const language of languages) {
-            console.log(language);
-            // Load snip's language syntax module.
-            import(`mod_snippet/languages/${language}`).then((liblanguage) => {
-                hljs.registerLanguage(language, liblanguage);
+        // Load snip's language syntax module.
+        import(`mod_snippet/languages/${language}`).then((liblanguage) => {
+
+            // Register the snip's language syntax module.
+            hljs.registerLanguage(language, liblanguage);
+
+            // Highlight all code blocks with the loaded language.
+            document.querySelectorAll(`pre code.language-${language}`).forEach((el) => {
+                hljs.highlightElement(el);
             });
-        }
-        hljs.highlightAll();
-    // });
-
+        });
+    }
 };
