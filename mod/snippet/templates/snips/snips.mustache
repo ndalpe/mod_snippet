@@ -25,18 +25,20 @@
         "cap_addsnip": "Whether the user can add a snip category"
     }
 }}
+
 <div class="accordion" id="snips">
     {{#snips}}
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="heading{{snipid}}">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapse{{snipid}}" aria-expanded="true" aria-controls="collapse{{snipid}}">
-                {{name}}
-            </button>
-        </h2>
-        <div id="collapse{{snipid}}" class="accordion-collapse collapse show"
-            aria-labelledby="heading{{snipid}}" data-bs-parent="#snips">
-            <div class="accordion-body">
+    <div class="card">
+        <div class="card-header" id="heading{{id}}">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                    data-target="#collapse{{id}}" aria-expanded="false" aria-controls="collapse{{id}}">
+                    {{name}}
+                </button>
+            </h2>
+        </div>
+        <div id="collapse{{id}}" class="collapse" aria-labelledby="heading{{id}}" data-parent="#snips">
+            <div class="card-body">
                 {{> mod_snippet/snips/snip }}
             </div>
         </div>
