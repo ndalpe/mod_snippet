@@ -19,9 +19,16 @@
 
     Example context (json):
     {
-        "language" : "php",
-        "snippet" : "Code",
-        "categories" : "category"
+        "snip" : {
+            "name" : "Snip name",
+            "display_language" : "php",
+            "language" : "php",
+            "snippet" : "Code",
+        }
+        "categories" : "category",
+        "displaylist" : "Display the snip as a list",
+        "hasnosnip" : "User has no snip yet",
+        "cap_addsnip" : "User can add a snip",
     }
 }}
 <div class="row">
@@ -52,10 +59,8 @@
         {{/hasnosnip}}
     </div>
 </div>
-{{#snippet}}
 {{#js}}
 require(['mod_snippet/category'], function(category) {
     category.init({{cmid}});
 });
 {{/js}}
-{{/snippet}}
