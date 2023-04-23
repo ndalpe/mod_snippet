@@ -167,4 +167,20 @@ class snips {
 
         return $snips;
     }
+
+    /**
+     * Get all the individual languages from a list of snips.
+     *
+     * @param array $snips The list of snips.
+     *
+     * @return array $languages The list of languages.
+     */
+    public static function get_all_languages_from_snips(array $snips): array {
+        $languages = [];
+        foreach ($snips as $snip) {
+            $languages[] = strtolower($snip->language);
+        }
+
+        return array_unique($languages);
+    }
 }

@@ -26,6 +26,8 @@ namespace mod_snippet\output;
 
 use plugin_renderer_base;
 
+use mod_snippet\local\snips;
+
 class renderer extends plugin_renderer_base {
     /**
      * Defer to template.
@@ -52,13 +54,20 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
 
         // Add the highlight.js script only if we are rendering a snip.
-        if (isset($data->snip['language'])) {
-            $PAGE->requires->js_call_amd('mod_snippet/highlight', 'highlightAll');
+        // if (!isset($data->hasnosnip)) {
+            // $PAGE->requires->js_call_amd('mod_snippet/highlight', 'highlightAll');
+
+            if (isset($data->snips)) {
+                $languages = snips::get_all_languages_from_snips($data->snips);
+            } else {
+                $languages = array(strtolower($data->snip['language']));
+            }
+
             $PAGE->requires->js_call_amd(
                 'mod_snippet/inithljs', 'init',
-                array('language' => strtolower($data->snip['language']))
+                array('languages' => $languages)
             );
-        }
+        // }
 
         return parent::render_from_template('mod_snippet/view_page', $data);
     }
