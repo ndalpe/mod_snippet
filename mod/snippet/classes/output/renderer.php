@@ -52,11 +52,11 @@ class renderer extends plugin_renderer_base {
         $data = $page->export_for_template($this);
 
         // Add the highlight.js script only if we are rendering a snip.
-        if (isset($data->language)) {
+        if (isset($data->snip['language'])) {
             $PAGE->requires->js_call_amd('mod_snippet/highlight', 'highlightAll');
             $PAGE->requires->js_call_amd(
                 'mod_snippet/inithljs', 'init',
-                array('language' => strtolower($data->language))
+                array('language' => strtolower($data->snip['language']))
             );
         }
 

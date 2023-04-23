@@ -29,19 +29,27 @@
         {{> mod_snippet/category_nav }}
     </div>
     <div class="col-md-9">
-        {{#snippet}}
-        <div class="row">
-            <div class="col-md-8">
-                <h4>{{ display_language }}</h4>
-            </div>
-            <div class="col-md-4 d-flex justify-content-end">
-                {{#cap_addsnip}}
-                <a href="/mod/snippet/create.php?id={{cmid}}" class="btn btn-secondary">{{#str}} btn_create_snippet, mod_snippet {{/str}}</a>
-                {{/cap_addsnip}}
-            </div>
-        </div>
-        <pre><code class="language-{{ language }}">{{ snippet }}</code></pre>
-        {{/snippet}}
+        {{! Display an individual snip. }}
+        {{#snip}}
+            {{> mod_snippet/snips/snip }}
+        {{/snip}}
+
+        {{! Display a list of snips. }}
+        {{#displaylist}}
+            {{> mod_snippet/snips/snips }}
+        {{/displaylist}}
+
+        {{! No snip yet. Offer to create one. }}
+        {{#hasnosnip}}
+            <p>{{#str}} no_snip_yet, mod_snippet {{/str}}</p>
+            {{#cap_addsnip}}
+            <p>{{#str}} clickhere_add_snip, mod_snippet {{/str}}<br />
+                <a href="/mod/snippet/create.php?id={{cmid}}" class="btn btn-secondary">
+                    {{#str}} btn_create_snippet, mod_snippet{{/str}}
+                </a>
+            </p>
+            {{/cap_addsnip}}
+        {{/hasnosnip}}
     </div>
 </div>
 {{#snippet}}

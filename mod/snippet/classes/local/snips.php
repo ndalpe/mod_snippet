@@ -26,6 +26,7 @@ namespace mod_snippet\local;
 
 defined('MOODLE_INTERNAL') || die();
 
+use core_analytics\user;
 use stdClass;
 
 /**
@@ -62,14 +63,21 @@ class snips {
             $snipformdata->categoryid = (int) $snipformdata->categoryid;
         }
 
-        // Clean up.
-        unset($snipformdata->firstcategory);
-
         // Create a new snip object.
         $snipformdata->snippetid = $snipformdata->id;
         $snipformdata->userid = $USER->id;
+        $snipformdata->intro = $snipformdata->description['text'];
+        $snipformdata->introformat = $snipformdata->description['format'];
         $snipformdata->timecreated = $time;
         $snipformdata->timemodified = $time;
+
+        // Clean up.
+        unset($snipformdata->firstcategory);
+        unset($snipformdata->id);
+        unset($snipformdata->description);
+        if ($snipformdata->snipid === 0) {
+            unset($snipformdata->snipid);
+        }
 
         // Insert the new snip into the database.
         $snipformdata->id = $DB->insert_record(
@@ -118,5 +126,45 @@ class snips {
         global $DB;
 
         return $DB->count_records('snippet_snips', ['categoryid' => $categoryid]);
+    }
+
+    /**
+     * Get the last 10 snips for the current user.
+     *
+     * @param int $userid The user id.
+     * @param int $maxrecords The maximum number of snips to return.
+     *
+     * @return array The snip list.
+     */
+    public static function get_latest_snips(bool|int $userid = false, int $maxrecords = 10): array {
+        global $DB, $USER;
+
+        if (!$userid) {
+            $userid = $USER->id;
+        }
+
+        $snips = $DB->get_records(
+            'snippet_snips', ['userid' => $userid], 'timecreated DESC', '*', 0, $maxrecords
+        );
+
+        return $snips;
+    }
+
+    /**
+     * Get all the snips for a given user in a given category.
+     *
+     * @param int $userid The user id.
+     * @param int $categoryid The category id.
+     *
+     * @return array The snip list.
+     */
+    public static function get_snips_for_category(int $userid, int $categoryid): array {
+        global $DB;
+
+        $snips = $DB->get_records(
+            'snippet_snips', ['userid' => $userid, 'categoryid' => $categoryid], 'timecreated DESC'
+        );
+
+        return $snips;
     }
 }

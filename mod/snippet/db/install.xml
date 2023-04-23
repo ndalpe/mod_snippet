@@ -23,6 +23,9 @@
 				<FIELD NAME="categoryid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
 				<FIELD NAME="snippetid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
 				<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+				<FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Snip name."/>
+				<FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Snip description."/>
+				<FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="The format of the desc field."/>
 				<FIELD NAME="private" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Whether this snippet is private or it can be viewed by other course participants."/>
 				<FIELD NAME="language" TYPE="char" LENGTH="50" NOTNULL="true" DEFAULT="text" SEQUENCE="false" COMMENT="The snippet programming language."/>
 				<FIELD NAME="snippet" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="The code snippet."/>

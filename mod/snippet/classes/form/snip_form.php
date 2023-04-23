@@ -60,9 +60,9 @@ class snip_form extends \moodleform {
         $mform->addHelpButton('name', 'snippetname', manager::PLUGIN_NAME);
 
         // Adding the description field.
-        $mform->addElement('editor', 'intro', get_string('snippetdesc', manager::PLUGIN_NAME),
+        $mform->addElement('editor', 'description', get_string('snippetdesc', manager::PLUGIN_NAME),
             array('enable_filemanagement' => false));
-        $mform->setType('intro', PARAM_RAW);
+        $mform->setType('description', PARAM_RAW);
 
         // Wheter the snippet is private of not.
         $mform->addElement('selectyesno', 'private', get_string('private', manager::PLUGIN_NAME));

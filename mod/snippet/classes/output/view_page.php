@@ -33,6 +33,7 @@ use templatable;
 
 use mod_snippet\local\categories;
 use mod_snippet\local\manager;
+use mod_snippet\local\snips;
 
 class view_page implements renderable, templatable {
 
@@ -83,12 +84,52 @@ class view_page implements renderable, templatable {
         // Can the current user add a category?
         $data->cap_addcategory = has_capability('mod/snippet:addcategory', $this->context);
 
-        // Get the snip content.
-        $snip = $DB->get_record('snippet_snips', ['id' => $this->snipid]);
-        if ($snip !== false) {
-            $data->display_language = new lang_string($snip->language, manager::PLUGIN_NAME);
-            $data->language = $snip->language;
-            $data->snippet = $snip->snippet;
+        // Possible URL:
+        // - /mod/snippet/view.php?id=x
+        // - /mod/snippet/view.php?id=x&categoryid=y
+        // - /mod/snippet/view.php?id=x&categoryid=y&snipid=z
+
+        if ($this->categoryid === 0 && $this->snipid === 0) {
+
+            // Displaya the 10 last snips.
+            $data->snips = array_values(
+                snips::get_latest_snips()
+            );
+
+            if (count($data->snips) > 0) {
+                // Tell the template to display the snips as a list.
+                $data->displaylist = true;
+            } else {
+                // Display the no snip message.
+                $data->hasnosnip = true;
+            }
+
+        } else if ($this->categoryid !== 0 && $this->snipid === 0) {
+
+            // Display all the snips for the given category.
+            $data->snips = array_values(
+                snips::get_snips_for_category($USER->id, $this->categoryid)
+            );
+
+            if (count($data->snips) > 0) {
+                // Tell the template to display the snips as a list.
+                $data->displaylist = true;
+            } else {
+                // Display the no snip message.
+                $data->hasnosnip = true;
+            }
+        } else {
+
+            // Get the snip content.
+            $snip = $DB->get_record('snippet_snips', ['id' => $this->snipid]);
+            if ($snip !== false) {
+                $data->snip = array(
+                    'name' => $snip->name,
+                    'display_language' => new lang_string($snip->language, manager::PLUGIN_NAME),
+                    'language' => $snip->language,
+                    'snippet' => $snip->snippet
+                );
+            }
         }
 
         // Get all the snippet categories for the given user.

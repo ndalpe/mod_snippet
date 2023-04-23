@@ -38,6 +38,8 @@ $string['snippet:addsnip'] = 'Add new snip.';
 $string['snippet:addcategory'] = 'Add new category.';
 
 $string['btn_create_snippet'] = 'Create new snip';
+$string['no_snip_yet'] = 'You have no snippet yet.';
+$string['clickhere_add_snip'] = 'Click on the button below to add a new one.';
 
 // Snippet form field
 $string['snippetname'] = 'name';
