@@ -26,6 +26,8 @@ namespace mod_snippet\event;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_snippet\local\manager;
+
 /**
  * The mod_snippet course module viewed event class.
  *
@@ -43,10 +45,13 @@ class course_module_viewed extends \core\event\course_module_viewed {
     protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
-        $this->data['objecttable'] = 'snippet';
+        $this->data['objecttable'] = manager::MODULE_NAME;
     }
 
     public static function get_objectid_mapping() {
-        return array('db' => 'snippet', 'restore' => 'snippet');
+        return array(
+            'db' => manager::MODULE_NAME,
+            'restore' => manager::MODULE_NAME
+        );
     }
 }

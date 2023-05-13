@@ -22,6 +22,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_snippet\local\manager;
+
 /**
  * Return if the plugin supports $feature.
  *
@@ -99,6 +101,34 @@ function snippet_delete_instance($id) {
     $DB->delete_records('snippet', array('id' => $id));
 
     return true;
+}
+
+/**
+ * Mark the activity completed (if required) and trigger the course_module_viewed event.
+ *
+ * @param  stdClass $snippet    snippet object
+ * @param  stdClass $course     course object
+ * @param  stdClass $cm         course module object
+ * @param  stdClass $context    context object
+ * @since Moodle 4.1
+ */
+function snippet_view($snippet, $course, $cm, $context) {
+
+    // Trigger course_module_viewed event.
+    $params = array(
+        'context' => $context,
+        'objectid' => $snippet->id
+    );
+
+    $event = \mod_snippet\event\course_module_viewed::create($params);
+    $event->add_record_snapshot('course_modules', $cm);
+    $event->add_record_snapshot('course', $course);
+    $event->add_record_snapshot(manager::MODULE_NAME, $snippet);
+    $event->trigger();
+
+    // Completion.
+    $completion = new completion_info($course);
+    $completion->set_module_viewed($cm);
 }
 
 /**
