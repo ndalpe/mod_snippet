@@ -98,6 +98,13 @@ function snippet_delete_instance($id) {
         return false;
     }
 
+    // Delete all the snips associated to the snippet.
+    $DB->delete_records('snippet_snips', array('snippetid' => $id));
+
+    // Delete all the category associated to the snippet.
+    $DB->delete_records('snippet_categories', array('snippetid' => $id));
+
+    // Delete the snippet module.
     $DB->delete_records('snippet', array('id' => $id));
 
     return true;
