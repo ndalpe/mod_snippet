@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 use core_analytics\user;
 use stdClass;
 use lang_string;
+use moodle_url;
 
 /**
  * Class to manage snips.
@@ -119,14 +120,18 @@ class snips {
     /**
      * Get the snip count for a given category.
      *
+     * @param int $userid Id of the user who created the category.
      * @param int $categoryid The category id.
      *
      * @return int The snippet count.
      */
-    public static function get_snip_count($categoryid): int {
+    public static function get_snip_count_for_category(int $userid, int $categoryid): int {
         global $DB;
 
-        return $DB->count_records('snippet_snips', ['categoryid' => $categoryid]);
+        return $DB->count_records(
+            'snippet_snips',
+            ['userid' => $userid, 'categoryid' => $categoryid]
+        );
     }
 
     /**
@@ -166,9 +171,31 @@ class snips {
             'snippet_snips', ['userid' => $userid, 'categoryid' => $categoryid], 'timecreated DESC'
         );
 
-        // Add the display language key.
         foreach ($snips as $snip) {
+            // Add the display language key.
             $snip->display_language = new lang_string($snip->language, manager::PLUGIN_NAME);
+
+            // Create the full snip URL.
+            $snip->fullsnipurl = new moodle_url(
+                '/mod/snippet/view.php',
+                ['id' => $snip->snippetid, 'categoryid' => $snip->categoryid, 'snipid' => $snip->id]
+            );
+        }
+
+        return $snips;
+    }
+
+    /**
+     * Set the current snip as active in a given list of snips.
+     *
+     * @param int $snipid The current snip id.
+     * @param array $snips The list of snips.
+     *
+     * @return array The list of snips with the active snip set.
+     */
+    public static function set_active(int $snipid, array $snips): array {
+        foreach ($snips as $key => $snip) {
+            $snips[$key]->active = ($snip->id == $snipid);
         }
 
         return $snips;

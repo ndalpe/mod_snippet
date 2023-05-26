@@ -25,28 +25,29 @@
         "cap_addsnip": "Whether the user can add a snip category"
     }
 }}
+
 <div class="row">
     <div class="col-md-8">
-    {{^displaylist}}
+    {{^layout_accordionlist}}
         <h3>{{name}}</h3>
-    {{/displaylist}}
-    {{#displaylist}}
+    {{/layout_accordionlist}}
+    {{#layout_accordionlist}}
         <h4>{{ display_language }}</h4>
-    {{/displaylist}}
+    {{/layout_accordionlist}}
     </div>
 
     <div class="col-md-4 d-flex justify-content-end">
-        {{^displaylist}}
+        {{^layout_accordionlist}}
         <div class="row">
             <div class="col-md-12 d-flex justify-content-end">
                 {{> mod_snippet/components/btn_create_snip }}
             </div>
         </div>
-        {{/displaylist}}
+        {{/layout_accordionlist}}
 
-        {{#displaylist}}
+        {{#layout_accordionlist}}
         {{> mod_snippet/components/btn_view_full_snip }}
-        {{/displaylist}}
+        {{/layout_accordionlist}}
     </div>
 </div>
 <div class="row">

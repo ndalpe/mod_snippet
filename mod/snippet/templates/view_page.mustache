@@ -32,31 +32,36 @@
     }
 }}
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-3">
         {{> mod_snippet/category_nav }}
     </div>
-    <div class="col-md-9">
+    <div class="col-9">
 
-        {{#displaylist}}
+        {{#layout_accordionlist}}
         <div class="row">
             <div class="col-md-12 d-flex justify-content-end">
                 {{> mod_snippet/components/btn_create_snip }}
             </div>
         </div>
-        {{/displaylist}}
+        {{/layout_accordionlist}}
 
-        {{! Display an individual snip. }}
-        {{#snip}}
-            {{> mod_snippet/snips/snip }}
-        {{/snip}}
+        {{#layout_snipwithsnipnav}}
+            {{> mod_snippet/snips/snipwithsnipnav }}
+        {{/layout_snipwithsnipnav}}
 
-        {{! Display a list of snips. }}
-        {{#displaylist}}
+        {{#layout_fullsnip}}
+            {{#snip}}
+                {{> mod_snippet/snips/snip }}
+            {{/snip}}
+        {{/layout_fullsnip}}
+
+        {{! Display a list of snips in an accordion format. }}
+        {{#layout_accordionlist}}
             {{> mod_snippet/snips/snips }}
-        {{/displaylist}}
+        {{/layout_accordionlist}}
 
         {{! No snip yet. Offer to create one. }}
-        {{#hasnosnip}}
+        {{#layout_hasnosnip}}
             <p>{{#str}} no_snip_yet, mod_snippet {{/str}}</p>
             {{#cap_addsnip}}
             <p>{{#str}} clickhere_add_snip, mod_snippet {{/str}}<br />
@@ -65,7 +70,7 @@
                 </a>
             </p>
             {{/cap_addsnip}}
-        {{/hasnosnip}}
+        {{/layout_hasnosnip}}
     </div>
 </div>
 {{#js}}
