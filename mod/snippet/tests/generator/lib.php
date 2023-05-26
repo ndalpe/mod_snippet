@@ -41,11 +41,14 @@ class mod_snippet_generator extends testing_module_generator {
 
         $record = (object)(array)$record;
 
-        if (!isset($record->content)) {
-            $record->content = 'Test snippet content';
+        if (!isset($record->name)) {
+            $record->name = 'This is test snippet';
         }
-        if (!isset($record->contentformat)) {
-            $record->contentformat = FORMAT_MOODLE;
+        if (!isset($record->intro)) {
+            $record->intro = 'This is the intro for the snippet';
+        }
+        if (!isset($record->introformat)) {
+            $record->introformat = FORMAT_MOODLE;
         }
 
         return parent::create_instance($record, (array)$options);
