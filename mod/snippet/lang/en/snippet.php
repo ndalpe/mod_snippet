@@ -64,6 +64,7 @@ $string['fieldlabel_categoryname'] = 'Category name';
 $string['fieldlabel_categoryname_required'] = 'Category name is required.';
 $string['create_new_category'] = 'Create new category';
 $string['notification_newcategory_created'] = 'New category created successfully.';
+$string['defaultcategoryname'] = 'Default category';
 
 // Languages name
 $string['bash'] = 'Bash';

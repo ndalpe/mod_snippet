@@ -26,6 +26,8 @@ namespace mod_snippet\local;
 
 defined('MOODLE_INTERNAL') || die();
 
+use stdClass;
+
 use mod_snippet\local\snips;
 
 /**
@@ -36,6 +38,45 @@ use mod_snippet\local\snips;
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class categories {
+
+    /**
+     * Create a new category.
+     *
+     * @param stdClass $categorydata The data to create the category.
+     *
+     * @return int The new category id.
+     */
+    public static function create_category($categorydata):int {
+        global $DB, $USER;
+
+        $time = time();
+
+        // Set userid if not already set.
+        if (!isset($categorydata->userid)) {
+            $categorydata->userid = $USER->id;
+        }
+
+        // Return false if snippetid does not exists in $categorydata.
+        if (!isset($categorydata->snippetid)) {
+            return false;
+        }
+
+        // Set the default category name if not already set.
+        if (!isset($categorydata->name) || empty($categorydata->name)) {
+            $categorydata->name = get_string('defaultcategoryname', 'mod_snippet');
+        }
+
+        $category = new stdClass();
+        $category->snippetid = $categorydata->snippetid;
+        $category->userid = $USER->id;
+        $category->name = $categorydata->name;
+        $category->timecreated = $time;
+        $category->timemodified = $time;
+
+        $categoryid = $DB->insert_record('snippet_categories', $category);
+
+        return $categoryid;
+    }
 
     /**
      * Get the user categories for a given user.

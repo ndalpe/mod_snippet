@@ -50,10 +50,8 @@ class create_category extends dynamic_form {
         $newcategory = new \stdClass();
         $newcategory->snippetid = $cm->instance;
         $newcategory->name = $data->categoryname;
-        $newcategory->userid = $USER->id;
-        $newcategory->timecreated = $newcategory->timemodified = time();
 
-        $newcategoryid = $DB->insert_record('snippet_categories', $newcategory);
+        $newcategoryid = \mod_snippet\local\categories::create_category($newcategory);
 
         $returnurl = new moodle_url(
             '/mod/' . manager::MODULE_NAME . '/view.php',

@@ -50,20 +50,15 @@ class snips {
     public static function create($snipformdata):int {
         global $DB, $USER;
 
-        $time = time();
-
         $cm = get_coursemodule_from_id('snippet', $snipformdata->id);
 
         // Create a new category if firstcategory hidden field is set to 'yes'.
         if ($snipformdata->firstcategory == 'yes') {
             $category = new stdClass();
             $category->snippetid = $cm->instance;
-            $category->userid = $USER->id;
             $category->name = $snipformdata->categoryname;
-            $category->timecreated = $time;
-            $category->timemodified = $time;
 
-            $snipformdata->categoryid = $DB->insert_record('snippet_categories', $category);
+            $snipformdata->categoryid = \mod_snippet\local\categories::create_category($category);
         } else {
             $snipformdata->categoryid = (int) $snipformdata->categoryid;
         }
@@ -73,8 +68,7 @@ class snips {
         $snipformdata->userid = $USER->id;
         $snipformdata->intro = $snipformdata->description['text'];
         $snipformdata->introformat = $snipformdata->description['format'];
-        $snipformdata->timecreated = $time;
-        $snipformdata->timemodified = $time;
+        $snipformdata->timecreated = $snipformdata->timemodified = time();
 
         // Clean up.
         unset($snipformdata->firstcategory);
