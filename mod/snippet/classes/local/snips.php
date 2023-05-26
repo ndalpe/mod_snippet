@@ -52,9 +52,12 @@ class snips {
 
         $time = time();
 
+        $cm = get_coursemodule_from_id('snippet', $snipformdata->id);
+
         // Create a new category if firstcategory hidden field is set to 'yes'.
         if ($snipformdata->firstcategory == 'yes') {
             $category = new stdClass();
+            $category->snippetid = $cm->instance;
             $category->userid = $USER->id;
             $category->name = $snipformdata->categoryname;
             $category->timecreated = $time;
@@ -66,7 +69,7 @@ class snips {
         }
 
         // Create a new snip object.
-        $snipformdata->snippetid = $snipformdata->id;
+        $snipformdata->snippetid = $cm->instance;
         $snipformdata->userid = $USER->id;
         $snipformdata->intro = $snipformdata->description['text'];
         $snipformdata->introformat = $snipformdata->description['format'];

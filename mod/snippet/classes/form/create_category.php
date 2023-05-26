@@ -45,7 +45,10 @@ class create_category extends dynamic_form {
 
         $data = $this->get_data();
 
+        $cm = get_coursemodule_from_id('snippet', $data->cmid);
+
         $newcategory = new \stdClass();
+        $newcategory->snippetid = $cm->instance;
         $newcategory->name = $data->categoryname;
         $newcategory->userid = $USER->id;
         $newcategory->timecreated = $newcategory->timemodified = time();
