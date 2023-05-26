@@ -120,43 +120,26 @@ class mod_snippet_test extends \advanced_testcase {
 
         // Create a category.
         $categoryid = $generator->create_category([
-            'snippetid' => $snippet->id,
-            'userid' => $user->id
+            'snippetid' => $snippet->id, 'userid' => $user->id
         ]);
-        $countcategory = $DB->count_records(
-            'snippet_categories',
-            ['snippetid' => $snippet->id, 'userid' => $user->id]
-        );
-        $this->assertEquals(1, $countcategory);
+        $this->assertEquals(1, $DB->count_records('snippet_categories', ['id' => $categoryid]));
 
         // Create a snip.
-        $snip = $generator->create_snip([
+        $snipid = $generator->create_snip([
             'categoryid' => $categoryid,
             'snippetid' => $snippet->id,
             'userid' => $user->id
         ]);
-        $countsnips = $DB->count_records(
-            'snippet_snips',
-            ['categoryid' => $categoryid, 'snippetid' => $snippet->id, 'userid' => $user->id]
-        );
-        $this->assertEquals(1, $countsnips);
+        $this->assertEquals(1, $DB->count_records('snippet_snips', ['id' => $snipid]));
 
         // Delete the snippet instance.
         snippet_delete_instance($snippet->id);
 
         // Assert the snips are deleted.
-        $countsnips = $DB->count_records(
-            'snippet_snips',
-            ['categoryid' => $categoryid, 'snippetid' => $snippet->id, 'userid' => $user->id]
-        );
-        $this->assertEquals(0, $countsnips);
+        $this->assertEquals(0, $DB->count_records('snippet_snips', ['id' => $snipid]));
 
         // Assert the categories are deleted.
-        $countcategory = $DB->count_records(
-            'snippet_categories',
-            ['snippetid' => $snippet->id, 'userid' => $user->id]
-        );
-        $this->assertEquals(0, $countcategory);
+        $this->assertEquals(0, $DB->count_records('snippet_categories', ['id' => $categoryid]));
 
         // Assert the snippet is deleted.
         $this->assertEquals(0, $DB->count_records('snippet', ['id' => $snippet->id]));
