@@ -35,7 +35,14 @@ defined('MOODLE_INTERNAL') || die();
  */
 class mod_snippet_generator extends testing_module_generator {
 
-    public function create_instance($record = null, array $options = null) {
+    /**
+     * Create a snippet instance.
+     *
+     * @param array|stdClass $record The snippet data.
+     *
+     * @return stdClass The snippet instance.
+     */
+    public function create_instance($record = null, array $options = null): stdClass {
         global $CFG;
         require_once($CFG->dirroot . '/lib/resourcelib.php');
 
@@ -52,5 +59,69 @@ class mod_snippet_generator extends testing_module_generator {
         }
 
         return parent::create_instance($record, (array)$options);
+    }
+
+    /**
+     * Function to create a dummy category.
+     *
+     * @param array|stdClass $record Only the snippetid and userid are required.
+     *
+     * @return int The categoryid.
+     */
+    public function create_category($record = null) {
+        global $DB;
+
+        $record = (array) $record;
+
+        if (!isset($record['snippetid'])) {
+            throw new coding_exception('snippetid must be present in phpunit_util::create_category() $record');
+        }
+
+        if (!isset($record['userid'])) {
+            throw new coding_exception('userid must be present in phpunit_util::create_category() $record');
+        }
+
+        $countcat = $DB->count_records('snippet_categories', array('snippetid' => $record['snippetid']));
+        $record['name'] = 'Category ' . ($countcat + 1);
+        $record['timecreated'] = $record['timemodified'] = time();
+
+        $categoryid = $DB->insert_record('snippet_categories', $record);
+
+        return $categoryid;
+    }
+
+    /**
+     * Function to create a dummy snip.
+     *
+     * @param array|stdClass $record Only the categoryid, snippetid and userid are required.
+     *
+     * @return int The snipid.
+     */
+    public function create_snip($record = null): int {
+        global $DB;
+
+        if (!isset($record['categoryid'])) {
+            throw new coding_exception('categoryid must be present in phpunit_util::create_category() $record');
+        }
+
+        if (!isset($record['snippetid'])) {
+            throw new coding_exception('snippetid must be present in phpunit_util::create_category() $record');
+        }
+
+        if (!isset($record['userid'])) {
+            throw new coding_exception('userid must be present in phpunit_util::create_category() $record');
+        }
+
+        $countsnip = $DB->count_records('snippet_snips', array('snippetid' => $record['snippetid']));
+        $record['name'] = 'Snippet ' . ($countsnip + 1);
+        $record['intro'] = 'This is the intro for the snippet';
+        $record['introformat'] = FORMAT_MOODLE;
+        $record['private'] = 1;
+        $record['language'] = 'php';
+        $record['snippet'] = '<?php echo "Hello World"; ?>';
+
+        $snipid = $DB->insert_record('snippet_snips', $record);
+
+        return $snipid;
     }
 }
