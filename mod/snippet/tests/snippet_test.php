@@ -105,31 +105,60 @@ class mod_snippet_test extends \advanced_testcase {
         global $DB;
         $this->resetAfterTest(true);
 
+        $generator = $this->getDataGenerator()->get_plugin_generator('mod_snippet');
+
         $course = $this->getDataGenerator()->create_course();
         $snippet = $this->getDataGenerator()->create_module(
             'snippet',
             array('course' => $course->id)
         );
 
-        $this->assertEquals(1, $DB->count_records('snippet'));
+        $this->assertEquals(1, $DB->count_records('snippet', ['id' => $snippet->id]));
 
-        // Create new snippet data.
-        $snippet->instance = $snippet->id;
-        $snippet->name = 'New name';
-        $snippet->intro = 'New intro';
-        $snippet->introformat = FORMAT_PLAIN;
-        $snippet->timecreated = 1000;
+        // Create a user.
+        $user = $this->getDataGenerator()->create_user();
 
-        // Update the snippet instance.
-        $this->assertTrue(snippet_update_instance($snippet));
+        // Create a category.
+        $categoryid = $generator->create_category([
+            'snippetid' => $snippet->id,
+            'userid' => $user->id
+        ]);
+        $countcategory = $DB->count_records(
+            'snippet_categories',
+            ['snippetid' => $snippet->id, 'userid' => $user->id]
+        );
+        $this->assertEquals(1, $countcategory);
 
-        // Get the updated snippet data.
-        $newsnippet = $DB->get_record('snippet', array('id' => $snippet->id));
+        // Create a snip.
+        $snip = $generator->create_snip([
+            'categoryid' => $categoryid,
+            'snippetid' => $snippet->id,
+            'userid' => $user->id
+        ]);
+        $countsnips = $DB->count_records(
+            'snippet_snips',
+            ['categoryid' => $categoryid, 'snippetid' => $snippet->id, 'userid' => $user->id]
+        );
+        $this->assertEquals(1, $countsnips);
 
-        // Make sure the snippet data was updated.
-        $this->assertEquals('New name', $newsnippet->name);
-        $this->assertEquals('New intro', $newsnippet->intro);
-        $this->assertEquals(FORMAT_PLAIN, $newsnippet->introformat);
-        $this->assertEquals(1000, $newsnippet->timecreated);
+        // Delete the snippet instance.
+        snippet_delete_instance($snippet->id);
+
+        // Assert the snips are deleted.
+        $countsnips = $DB->count_records(
+            'snippet_snips',
+            ['categoryid' => $categoryid, 'snippetid' => $snippet->id, 'userid' => $user->id]
+        );
+        $this->assertEquals(0, $countsnips);
+
+        // Assert the categories are deleted.
+        $countcategory = $DB->count_records(
+            'snippet_categories',
+            ['snippetid' => $snippet->id, 'userid' => $user->id]
+        );
+        $this->assertEquals(0, $countcategory);
+
+        // Assert the snippet is deleted.
+        $this->assertEquals(0, $DB->count_records('snippet', ['id' => $snippet->id]));
     }
 }
