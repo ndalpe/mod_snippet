@@ -44,6 +44,7 @@
 		<TABLE NAME="snippet_categories" COMMENT="User defined snippets categories.">
 			<FIELDS>
 				<FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+				<FIELD NAME="snippetid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
 				<FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="The user (author) id."/>
 				<FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name of the category."/>
 				<FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
