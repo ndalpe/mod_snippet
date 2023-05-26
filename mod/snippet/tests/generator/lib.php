@@ -113,7 +113,7 @@ class mod_snippet_generator extends testing_module_generator {
         }
 
         $countsnip = $DB->count_records('snippet_snips', array('snippetid' => $record['snippetid']));
-        $record['name'] = 'Snippet ' . ($countsnip + 1);
+        $record['name'] = 'Snip ' . ($countsnip + 1);
         $record['intro'] = 'This is the intro for the snippet';
         $record['introformat'] = FORMAT_MOODLE;
         $record['private'] = 1;

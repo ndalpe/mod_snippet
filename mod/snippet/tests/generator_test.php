@@ -17,7 +17,7 @@
 namespace mod_snippet;
 
 /**
- * PHPUnit data generator testcase
+ * PHPUnit data generator testcase.
  *
  * @package    mod_snippet
  * @category   phpunit
@@ -49,5 +49,37 @@ class generator_test extends \advanced_testcase {
 
         $context = \context_module::instance($cm->id);
         $this->assertEquals($snippet->cmid, $context->instanceid);
+
+        $user = $this->getDataGenerator()->create_user();
+
+        // Test category generator.
+        $this->assertEquals(0, $DB->count_records('snippet_categories'));
+
+        $catparams = ['snippetid' => $snippet->id, 'userid' => $user->id];
+
+        $category1id = $generator->create_category($catparams);
+        $category1 = $DB->get_record('snippet_categories', ['id' => $category1id]);
+        $this->assertEquals(1, $DB->count_records('snippet_categories'));
+        $this->assertEquals('Category 1', $category1->name);
+
+        $category2id = $generator->create_category($catparams);
+        $category2 = $DB->get_record('snippet_categories', ['id' => $category2id]);
+        $this->assertEquals(2, $DB->count_records('snippet_categories'));
+        $this->assertEquals('Category 2', $category2->name);
+
+        // Test snips generator.
+        $this->assertEquals(0, $DB->count_records('snippet_snips'));
+
+        $snipparams = ['categoryid' => $category1id, 'snippetid' => $snippet->id, 'userid' => $user->id];
+
+        $snip1id = $generator->create_snip($snipparams);
+        $snip1 = $DB->get_record('snippet_snips', ['id' => $snip1id]);
+        $this->assertEquals(1, $DB->count_records('snippet_snips'));
+        $this->assertEquals('Snip 1', $snip1->name);
+
+        $snip2id = $generator->create_snip($snipparams);
+        $snip2 = $DB->get_record('snippet_snips', ['id' => $snip2id]);
+        $this->assertEquals(2, $DB->count_records('snippet_snips'));
+        $this->assertEquals('Snip 2', $snip2->name);
     }
 }
