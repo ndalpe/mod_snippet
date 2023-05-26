@@ -13,9 +13,9 @@
     <http: //www.gnu.org/licenses />.
 }}
 {{!
-    @template mod_snippet/snips/snip
+    @template mod_snippet/snips/snips
 
-    This template renders an individual snip.
+    This template renders a list of snips.
 
     Example context (json):
     {
@@ -26,32 +26,13 @@
     }
 }}
 
-<div class="row">
-    <div class="col-md-8">
-    {{^layout_accordionlist}}
-        <h3>{{name}}</h3>
-    {{/layout_accordionlist}}
-    {{#layout_accordionlist}}
-        <h4>{{ display_language }}</h4>
-    {{/layout_accordionlist}}
-    </div>
-
-    <div class="col-md-4 d-flex justify-content-end">
-        {{^layout_accordionlist}}
-        <div class="row">
-            <div class="col-md-12 d-flex justify-content-end">
-                {{> mod_snippet/components/btn_create_snip }}
-            </div>
+<div class="list-group">
+    {{#snipsincat}}
+    <a href="{{{fullsnipurl}}}" class="list-group-item list-group-item-action{{#active}} active{{/active}}">
+        <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{name}}</h5>
         </div>
-        {{/layout_accordionlist}}
-
-        {{#layout_accordionlist}}
-        {{> mod_snippet/components/btn_view_full_snip }}
-        {{/layout_accordionlist}}
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <pre><code class="language-{{ language }}">{{{snippet}}}</code></pre>
-    </div>
+        <p class="mb-1">{{#shortentext}} 50, {{{intro}}} {{/shortentext}}</p>
+    </a>
+    {{/snipsincat}}
 </div>

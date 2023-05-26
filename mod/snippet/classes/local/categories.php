@@ -82,13 +82,29 @@ class categories {
 
         foreach ($categories as $key => $category) {
             // Get the snippet count for each category.
-            $categories[$key]->count = snips::get_snip_count($category->id);
+            $categories[$key]->count = snips::get_snip_count_for_category($userid, $category->id);
 
             // If the category contains no snippet, set hasnosnippet to true.
             $categories[$key]->hasnosnippet = ($categories[$key]->count == 0);
         }
 
-        return array_values($categories);
+        return $categories;
+    }
+
+    /**
+     * Set the current category as active.
+     *
+     * @param int $categoryid The category id to set as active.
+     * @param array $categories The list of categories.
+     *
+     * @return array The list of categories with the active category set.
+     */
+    public static function set_active(int $categoryid, array $categories): array {
+        foreach ($categories as $key => $category) {
+            $categories[$key]->active = ($category->id == $categoryid);
+        }
+
+        return $categories;
     }
 
     /**

@@ -62,7 +62,9 @@ class create_page implements renderable, templatable {
         $data->form = $this->form;
 
         // Get all the snippet categories for the given user.
-        $data->categories = categories::get_category_list_for_nav($USER->id);
+        $data->categories = array_values(
+            categories::get_category_list_for_nav($USER->id)
+        );
 
         return $data;
     }

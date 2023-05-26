@@ -84,6 +84,20 @@ class view_page implements renderable, templatable {
         // Can the current user add a category?
         $data->cap_addcategory = has_capability('mod/snippet:addcategory', $this->context);
 
+        // This layout display a single snip with the snip navigation on the left.
+        $data->layout_snipwithsnipnav = false;
+
+        // This layout displays a single snip without navigation.
+        // This layout is usually used when there is only one snip in the current cat.
+        $data->layout_fullsnip = false;
+
+        // This layout displays a list of snips in an accordion component.
+        $data->layout_accordionlist = false;
+
+        // This layout is used when there is no snip to display.
+        // It displays a link to create a new snip.
+        $data->layout_hasnosnip = false;
+
         // Possible URL:
         // - /mod/snippet/view.php?id=x
         // - /mod/snippet/view.php?id=x&categoryid=y
@@ -98,10 +112,10 @@ class view_page implements renderable, templatable {
 
             if (count($data->snips) > 0) {
                 // Tell the template to display the snips as a list.
-                $data->displaylist = true;
+                $data->layout_accordionlist = true;
             } else {
                 // Display the no snip message.
-                $data->hasnosnip = true;
+                $data->layout_hasnosnip = true;
             }
 
         } else if ($this->categoryid !== 0 && $this->snipid === 0) {
@@ -113,12 +127,23 @@ class view_page implements renderable, templatable {
 
             if (count($data->snips) > 0) {
                 // Tell the template to display the snips as a list.
-                $data->displaylist = true;
+                $data->layout_accordionlist = true;
             } else {
                 // Display the no snip message.
-                $data->hasnosnip = true;
+                $data->layout_hasnosnip = true;
             }
         } else {
+
+            // Get all the snips for the given category if there is more than one snip in the category.
+            $snipcount = snips::get_snip_count_for_category($USER->id, $this->categoryid);
+            if ($snipcount > 1) {
+                $data->layout_snipwithsnipnav = true;
+                $snips = snips::get_snips_for_category($USER->id, $this->categoryid);
+                $snips = snips::set_active($this->snipid, $snips);
+                $data->snipsincat = array_values($snips);
+            } else {
+                $data->layout_fullsnip = true;
+            }
 
             // Get the snip content.
             $snip = $DB->get_record('snippet_snips', ['id' => $this->snipid]);
@@ -133,7 +158,10 @@ class view_page implements renderable, templatable {
         }
 
         // Get all the snippet categories for the given user.
-        $data->categories = categories::get_category_list_for_nav($USER->id);
+        $categories = categories::get_category_list_for_nav($USER->id);
+        $categories = categories::set_active($this->categoryid, $categories);
+        $data->categories = array_values($categories);
+
         return $data;
     }
 }
