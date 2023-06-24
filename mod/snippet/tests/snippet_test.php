@@ -18,7 +18,6 @@
  * Unit tests for mod_snippet lib
  *
  * @package mod_page
- * @category external
  * @copyright 2023 Nicolas Dalpe <ndalpe@gmail.com>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 4.1
@@ -32,7 +31,6 @@ defined('MOODLE_INTERNAL') || die();
  * Unit tests for mod_snippet.
  *
  * @package mod_snippet
- * @category external
  * @copyright 2023 Nicolas Dalpe <ndalpe@gmail.com>
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 4.1

@@ -68,7 +68,7 @@ class mod_snippet_generator extends testing_module_generator {
      *
      * @return int The categoryid.
      */
-    public function create_category($record = null) {
+    public function create_category($record) {
         global $DB;
 
         $record = (array) $record;
