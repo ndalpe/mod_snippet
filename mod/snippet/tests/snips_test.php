@@ -246,4 +246,45 @@ class snips_test extends \advanced_testcase {
         $this->assertEquals($snipdata->language, $updatedsnip->language);
         $this->assertEquals($snipdata->snippet, $updatedsnip->snippet);
     }
+
+    public function test_get_snip_count_for_category() {
+        global $DB;
+        $this->resetAfterTest(true);
+
+        $generator = $this->getDataGenerator();
+        $snippetgenerator = $this->getDataGenerator()->get_plugin_generator('mod_snippet');
+
+        // Create a course and a snippet.
+        $course = $generator->create_course();
+        $snippet = $generator->create_module(
+            'snippet',
+            ['course' => $course->id]
+        );
+        $this->assertEquals(1, $DB->count_records('snippet'));
+
+        $cm = get_coursemodule_from_instance('snippet', $snippet->id);
+        $this->assertEquals($snippet->id, $cm->instance);
+        $this->assertEquals('snippet', $cm->modname);
+
+        $context = \context_module::instance($cm->id);
+        $this->assertEquals($snippet->cmid, $context->instanceid);
+
+        // Create a user.
+        $user = $generator->create_user();
+
+        // Create a categories.
+        $categoryid = $snippetgenerator->create_category(
+            ['snippetid' => $snippet->id, 'userid' => $user->id]
+        );
+        $this->assertEquals(1, $DB->count_records('snippet_categories', ['id' => $categoryid]));
+
+        $snipparam = ['categoryid' => $categoryid, 'userid' => $user->id, 'snippetid' => $snippet->id];
+        $snip1 = $snippetgenerator->create_snip($snipparam);
+        $snip2 = $snippetgenerator->create_snip($snipparam);
+        $snip3 = $snippetgenerator->create_snip($snipparam);
+
+        $numsnip = snips::get_snip_count_for_category($user->id, $categoryid);
+        $this->assertIsInt($numsnip);
+        $this->assertEquals(3, $numsnip);
+    }
 }
