@@ -110,18 +110,17 @@ class snips {
         $snip = new \stdClass();
         $snip->id = $data->snipid;
         $snip->categoryid = $data->categoryid;
-        $snip->snippetid = $data->id;
-        $snip->userid = $USER->id;
         $snip->name = $data->name;
         $snip->intro = $introtext;
         $snip->introformat = $introformat;
+        $snip->private = $data->private;
+        $snip->language = $data->language;
+        $snip->snippet = $data->snippet;
         $snip->timemodified = time();
 
-        // Insert the new snip into the database.
-        $snip->id = $DB->update_record('snippet_snips', $snip);
+        $update = $DB->update_record('snippet_snips', $snip);
 
-        // Return the new snip.
-        return $snip->id;
+        return $update;
     }
 
     /**
