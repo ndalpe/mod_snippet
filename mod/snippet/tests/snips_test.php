@@ -253,4 +253,36 @@ class snips_test extends \advanced_testcase {
         $snipsincat = snips::get_latest_snips($this->user->id);
         $this->assertEquals(8, count($snipsincat));
     }
+
+    /**
+     * Set the current snip as active in a given list of snips.
+     */
+    public function test_set_active() {
+        global $DB;
+
+        // Create 5 snips.
+        $snipparam = [
+            'categoryid' => $this->categoryid,
+            'userid' => $this->user->id,
+            'snippetid' => $this->snippet->id
+        ];
+        for ($i = 0; $i < 5; $i++) {
+            $this->snippetgenerator->create_snip($snipparam);
+        }
+
+        // Get all the snips.
+        $snips = $DB->get_records('snippet_snips', ['userid' => $this->user->id]);
+
+        // Pick the first snip.
+        $snipkey = key($snips);
+
+        // Make sure the snip doesn't have an active attribute.
+        $this->assertObjectNotHasAttribute('active', $snips[$snipkey]);
+
+        // Set the snip as active.
+        $snips = snips::set_active($snipkey, $snips);
+
+        // Make sure the snip has an active attribute.
+        $this->assertObjectHasAttribute('active', $snips[$snipkey]);
+    }
 }
