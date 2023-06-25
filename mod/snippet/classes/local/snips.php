@@ -94,13 +94,13 @@ class snips {
     }
 
     /**
-     * Create a new snip.
+     * Update an existing snip.
      *
-     * @param stdClass $data The data to create the snip.
+     * @param stdClass $data The data to update the snip with.
      *
-     * @return stdClass The new snip id.
+     * @return bool True if snip has been successfully updated.
      */
-    public static function update($data): int {
+    public static function update($data): bool {
         global $DB, $USER;
 
         $introtext = $data->intro['text'];
