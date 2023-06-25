@@ -13,18 +13,21 @@
     <http: //www.gnu.org/licenses />.
 }}
 {{!
-    @template mod_snippet/components/btn_create_snip
+    @template mod_snippet/components/btn_update_snip
 
-    This template renders a button to create a new snip.
+    This template renders a button to update a snip.
 
     Example context (json):
     {
-        "cmid" : "Course module id"
+        "cap_addsnip": "Whether the user can add a snip.",
+        "cmid" : "Course module id",
+        "categoryid" : "Snip category id",
+        "snipid" : "Snip id"
     }
 }}
 
 {{#cap_addsnip}}
-<a href="/mod/snippet/snip.php?id={{cmid}}" class="btn btn-secondary m-3">
-    {{#str}} btn_create_snippet, mod_snippet {{/str}}
+<a href="/mod/snippet/snip.php?id={{cmid}}&categoryid={{categoryid}}&snipid={{snipid}}" class="btn btn-secondary m-3">
+    {{#str}} btn_update_snippet, mod_snippet {{/str}}
 </a>
 {{/cap_addsnip}}

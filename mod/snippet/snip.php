@@ -52,11 +52,13 @@ require_login($course, true, $cm);
 $modulecontext = context_module::instance($cm->id);
 
 $PAGE->set_url(new \moodle_url(
-    '/mod/' . manager::MODULE_NAME . '/create.php', manager::get_param_for_url()
+    '/mod/' . manager::MODULE_NAME . '/snip.php', manager::get_param_for_url()
 ));
 $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
+
+$a = manager::get_param_from_url();
 
 $mform = new mod_snippet\form\snip_form(null, manager::get_param_from_url());
 
@@ -88,7 +90,7 @@ if ($mform->is_cancelled()) {
 echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('mod_snippet');
-$renderable = new \mod_snippet\output\create_page($cm, $mform->render());
+$renderable = new \mod_snippet\output\snip_page($cm, $mform->render());
 echo $renderer->render($renderable);
 
 echo $OUTPUT->footer();

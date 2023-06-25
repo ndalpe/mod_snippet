@@ -30,6 +30,9 @@
     <div class="col-md-8">
     {{^layout_accordionlist}}
         <h3>{{name}}</h3>
+        {{#intro}}
+            {{{intro}}}
+        {{/intro}}
     {{/layout_accordionlist}}
     {{#layout_accordionlist}}
         <h4>{{ display_language }}</h4>
@@ -40,6 +43,7 @@
         {{^layout_accordionlist}}
         <div class="row">
             <div class="col-md-12 d-flex justify-content-end">
+                {{> mod_snippet/components/btn_update_snip }}
                 {{> mod_snippet/components/btn_create_snip }}
             </div>
         </div>

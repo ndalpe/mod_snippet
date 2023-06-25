@@ -54,7 +54,7 @@ $modulecontext = context_module::instance($cm->id);
 snippet_view($page, $course, $cm, $context);
 
 $PAGE->set_url(new \moodle_url(
-    '/mod/' . manager::MODULE_NAME . '/create.php',
+    '/mod/' . manager::MODULE_NAME . '/view.php',
     manager::get_param_for_url()
 ));
 $PAGE->set_title(format_string($moduleinstance->name));
