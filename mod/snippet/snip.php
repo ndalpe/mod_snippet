@@ -90,7 +90,7 @@ if ($mform->is_cancelled()) {
 echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('mod_snippet');
-$renderable = new \mod_snippet\output\create_page($cm, $mform->render());
+$renderable = new \mod_snippet\output\snip_page($cm, $mform->render());
 echo $renderer->render($renderable);
 
 echo $OUTPUT->footer();

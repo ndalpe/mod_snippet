@@ -31,7 +31,7 @@ use stdClass;
 
 use mod_snippet\local\categories;
 
-class create_page implements renderable, templatable {
+class snip_page implements renderable, templatable {
 
     /** @var stdClass $cm The course module object. */
     private $cm = null;
