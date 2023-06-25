@@ -42,11 +42,22 @@ use mod_snippet\local\snips;
  */
 class snips_test extends \advanced_testcase {
 
+    /** @var testing_data_generator PHPUnit generator. */
     public $generator;
+
+    /** @var mod_snippet_generator mod_snippet generator. */
     public $snippetgenerator;
+
+    /** @var stdClass The test course. */
     public $course;
+
+    /** @var stdClass The test user. */
     public $user;
+
+    /** @var stdClass The test snippet. */
     public $snippet;
+
+    /** @var int The test category id. */
     public $categoryid;
 
     /**
