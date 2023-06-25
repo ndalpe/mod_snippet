@@ -58,6 +58,8 @@ $PAGE->set_title(format_string($moduleinstance->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
+$a = manager::get_param_from_url();
+
 $mform = new mod_snippet\form\snip_form(null, manager::get_param_from_url());
 
 if ($mform->is_cancelled()) {

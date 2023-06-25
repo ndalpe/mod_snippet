@@ -32,9 +32,14 @@ class snip_form extends \moodleform {
      * Snippet form constructor.
      */
     public function definition() {
-        global $CFG, $USER;
+        global $CFG, $DB, $USER;
 
         $mform = $this->_form;
+
+        // Get the snip data in case of edit.
+        if (isset($this->_customdata['snipid'])) {
+            $snip = $DB->get_record('snippet_snips', ['id' => $this->_customdata['snipid']]);
+        }
 
         // Set the course module id in the form.
         $mform->addElement('hidden', 'id');
@@ -60,9 +65,12 @@ class snip_form extends \moodleform {
         $mform->addHelpButton('name', 'snippetname', manager::PLUGIN_NAME);
 
         // Adding the description field.
-        $mform->addElement('editor', 'description', get_string('snippetdesc', manager::PLUGIN_NAME),
-            array('enable_filemanagement' => false));
-        $mform->setType('description', PARAM_RAW);
+        $mform->addElement('editor',
+            'intro',
+            get_string('snippetdesc', manager::PLUGIN_NAME),
+            array('enable_filemanagement' => false)
+        );
+        $mform->setType('intro', PARAM_RAW);
 
         // Wheter the snippet is private of not.
         $mform->addElement('selectyesno', 'private', get_string('private', manager::PLUGIN_NAME));
@@ -107,5 +115,15 @@ class snip_form extends \moodleform {
 
         // Add standard buttons.
         $this->add_action_buttons();
+
+        if ($snip !== false) {
+            // Remove the id from the snip object so the course module id
+            // is not overwritten by the snip id.
+            if (isset($snip->id)) {
+                unset($snip->id);
+            }
+
+            $this->set_data($snip);
+        }
     }
 }

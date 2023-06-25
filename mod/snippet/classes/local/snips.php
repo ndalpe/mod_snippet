@@ -66,17 +66,19 @@ class snips {
         }
 
         // Create a new snip object.
+        $introtext = $snipformdata->intro['text'];
+        $introformat = $snipformdata->intro['format'];
+
         $snipformdata->snippetid = $snipformdata->id;
         $snipformdata->userid = $USER->id;
-        $snipformdata->intro = $snipformdata->description['text'];
-        $snipformdata->introformat = $snipformdata->description['format'];
+        $snipformdata->intro = $introtext;
+        $snipformdata->introformat = $introformat;
         $snipformdata->timecreated = $time;
         $snipformdata->timemodified = $time;
 
         // Clean up.
         unset($snipformdata->firstcategory);
         unset($snipformdata->id);
-        unset($snipformdata->description);
         if ($snipformdata->snipid === 0) {
             unset($snipformdata->snipid);
         }
@@ -101,17 +103,22 @@ class snips {
     public static function update($data): int {
         global $DB, $USER;
 
-        // Create a new snip object.
+        $introtext = $data->intro['text'];
+        $introformat = $data->intro['format'];
+
+        // Create a new snip object with the submitted data.
         $snip = new \stdClass();
-        $snip->name = $data->name;
-        $snip->description = $data->description;
+        $snip->id = $data->snipid;
         $snip->categoryid = $data->categoryid;
+        $snip->snippetid = $data->id;
         $snip->userid = $USER->id;
-        $snip->timecreated = time();
+        $snip->name = $data->name;
+        $snip->intro = $introtext;
+        $snip->introformat = $introformat;
         $snip->timemodified = time();
 
         // Insert the new snip into the database.
-        $snip->id = $DB->insert_record('snippet_snips', $snip);
+        $snip->id = $DB->update_record('snippet_snips', $snip);
 
         // Return the new snip.
         return $snip->id;
