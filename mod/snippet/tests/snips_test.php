@@ -41,12 +41,24 @@ use mod_snippet\local\snips;
  */
 class snips_test extends \advanced_testcase {
 
+    public $course;
+
+    /**
+     * Setup function
+     */
+    protected function setUp(): void {
+
+        $this->resetAfterTest(true);
+
+        $generator = $this->getDataGenerator();
+        $this->course = $generator->create_course();
+    }
+
     /**
      * Test the snip instance creation.
      */
     public function test_create_snip() {
         global $DB;
-        $this->resetAfterTest(true);
 
         $time = time();
 
@@ -54,8 +66,7 @@ class snips_test extends \advanced_testcase {
         $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create a course and a snippet.
-        $course = $generator->create_course();
-        $snippet = $snippetgenerator->create_instance(['course' => $course->id]);
+        $snippet = $snippetgenerator->create_instance(['course' => $this->course->id]);
         $this->assertEquals(1, $DB->count_records('snippet'));
 
         // $cm = get_coursemodule_from_instance('snippet', $snippet->id);
@@ -111,7 +122,6 @@ class snips_test extends \advanced_testcase {
      */
     public function test_create_snip_with_first_category() {
         global $DB;
-        $this->resetAfterTest(true);
 
         $time = time();
 
@@ -119,8 +129,7 @@ class snips_test extends \advanced_testcase {
         $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create a course and a snippet.
-        $course = $generator->create_course();
-        $snippet = $snippetgenerator->create_instance(['course' => $course->id]);
+        $snippet = $snippetgenerator->create_instance(['course' => $this->course->id]);
         $this->assertEquals(1, $DB->count_records('snippet'));
 
         // Create a user.
@@ -151,7 +160,6 @@ class snips_test extends \advanced_testcase {
      */
     public function test_update_snip() {
         global $DB;
-        $this->resetAfterTest(true);
 
         $time = time();
 
@@ -159,8 +167,7 @@ class snips_test extends \advanced_testcase {
         $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create a course and a snippet.
-        $course = $generator->create_course();
-        $snippet = $snippetgenerator->create_instance(['course' => $course->id]);
+        $snippet = $snippetgenerator->create_instance(['course' => $this->course->id]);
         $this->assertEquals(1, $DB->count_records('snippet'));
 
         $cm = get_coursemodule_from_instance('snippet', $snippet->id);
@@ -230,14 +237,12 @@ class snips_test extends \advanced_testcase {
 
     public function test_get_snip_count_for_category() {
         global $DB;
-        $this->resetAfterTest(true);
 
         $generator = $this->getDataGenerator();
         $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create a course and a snippet.
-        $course = $generator->create_course();
-        $snippet = $snippetgenerator->create_instance(['course' => $course->id]);
+        $snippet = $snippetgenerator->create_instance(['course' => $this->course->id]);
         $this->assertEquals(1, $DB->count_records('snippet'));
 
         // Create a user.
@@ -261,14 +266,12 @@ class snips_test extends \advanced_testcase {
 
     public function test_get_latest_snips() {
         global $DB;
-        $this->resetAfterTest(true);
 
         $generator = $this->getDataGenerator();
         $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create a course and a snippet.
-        $course = $generator->create_course();
-        $snippet = $snippetgenerator->create_instance(['course' => $course->id]);
+        $snippet = $snippetgenerator->create_instance(['course' => $this->course->id]);
         $this->assertEquals(1, $DB->count_records('snippet'));
 
         // Create a user.
@@ -302,14 +305,12 @@ class snips_test extends \advanced_testcase {
      */
     public function test_get_snips_for_category() {
         global $DB;
-        $this->resetAfterTest(true);
 
         $generator = $this->getDataGenerator();
         $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create a course and a snippet.
-        $course = $generator->create_course();
-        $snippet = $snippetgenerator->create_instance(['course' => $course->id]);
+        $snippet = $snippetgenerator->create_instance(['course' => $this->course->id]);
         $this->assertEquals(1, $DB->count_records('snippet'));
 
         // Create a user.
