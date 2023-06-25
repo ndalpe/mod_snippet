@@ -150,6 +150,7 @@ class view_page implements renderable, templatable {
             if ($snip !== false) {
                 $data->snip = array(
                     'name' => $snip->name,
+                    'intro' => $snip->intro,
                     'display_language' => new lang_string($snip->language, manager::PLUGIN_NAME),
                     'language' => $snip->language,
                     'snippet' => $snip->snippet
