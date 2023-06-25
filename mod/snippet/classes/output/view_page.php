@@ -149,6 +149,8 @@ class view_page implements renderable, templatable {
             $snip = $DB->get_record('snippet_snips', ['id' => $this->snipid]);
             if ($snip !== false) {
                 $data->snip = array(
+                    'categoryid' => $snip->categoryid,
+                    'snipid' => $snip->id,
                     'name' => $snip->name,
                     'intro' => $snip->intro,
                     'display_language' => new lang_string($snip->language, manager::PLUGIN_NAME),
