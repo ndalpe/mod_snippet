@@ -38,6 +38,7 @@ use mod_snippet\local\snips;
  * @license https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 4.1
  * @group mod_snippet
+ * @coversDefaultClass \mod_snippet\local\snips
  */
 class snips_test extends \advanced_testcase {
 
@@ -68,6 +69,8 @@ class snips_test extends \advanced_testcase {
 
     /**
      * Test the snip instance creation.
+     *
+     * @covers ::create()
      */
     public function test_create_snip() {
         global $DB;
@@ -108,6 +111,8 @@ class snips_test extends \advanced_testcase {
 
     /**
      * Test the snip instance creation.
+     *
+     * @covers ::create()
      */
     public function test_create_snip_with_first_category() {
         global $DB;
@@ -136,7 +141,9 @@ class snips_test extends \advanced_testcase {
     }
 
     /**
-     * Test the snip instance creation.
+     * Test update an existing snip.
+     *
+     * @covers ::update()
      */
     public function test_update_snip() {
         global $DB;
@@ -198,6 +205,11 @@ class snips_test extends \advanced_testcase {
         $this->assertEquals($snipdata->snippet, $updatedsnip->snippet);
     }
 
+    /**
+     * Get the snip count for a given category.
+     *
+     * @covers ::get_snip_count_for_category()
+     */
     public function test_get_snip_count_for_category() {
 
         $snipparam = [
@@ -214,6 +226,11 @@ class snips_test extends \advanced_testcase {
         $this->assertEquals(3, $numsnip);
     }
 
+    /**
+     * Get the last 10 snips for the current user.
+     *
+     * @covers ::get_latest_snips()
+     */
     public function test_get_latest_snips() {
 
         // Create 15 snips.
@@ -235,6 +252,8 @@ class snips_test extends \advanced_testcase {
 
     /**
      * Get all the snips for a given user in a given category.
+     *
+     * @covers ::get_snips_for_category()
      */
     public function test_get_snips_for_category() {
 
@@ -256,6 +275,8 @@ class snips_test extends \advanced_testcase {
 
     /**
      * Set the current snip as active in a given list of snips.
+     *
+     * @covers ::set_active()
      */
     public function test_set_active() {
         global $DB;
