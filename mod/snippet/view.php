@@ -51,7 +51,7 @@ require_login($course, true, $cm);
 $modulecontext = context_module::instance($cm->id);
 
 // Completion and trigger events.
-snippet_view($page, $course, $cm, $context);
+// snippet_view($page, $course, $cm, $modulecontext);
 
 $PAGE->set_url(new \moodle_url(
     '/mod/' . manager::MODULE_NAME . '/view.php',
