@@ -41,6 +41,8 @@ use mod_snippet\local\snips;
  */
 class snips_test extends \advanced_testcase {
 
+    public $generator;
+    public $snippetgenerator;
     public $course;
     public $user;
     public $snippet;
@@ -53,13 +55,13 @@ class snips_test extends \advanced_testcase {
 
         $this->resetAfterTest(true);
 
-        $generator = $this->getDataGenerator();
-        $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
+        $this->generator = $this->getDataGenerator();
+        $this->snippetgenerator = $this->generator->get_plugin_generator('mod_snippet');
 
-        $this->course = $generator->create_course();
-        $this->user = $generator->create_user();
-        $this->snippet = $snippetgenerator->create_instance(['course' => $this->course->id]);
-        $this->categoryid = $snippetgenerator->create_category(
+        $this->course = $this->generator->create_course();
+        $this->user = $this->generator->create_user();
+        $this->snippet = $this->snippetgenerator->create_instance(['course' => $this->course->id]);
+        $this->categoryid = $this->snippetgenerator->create_category(
             ['snippetid' => $this->snippet->id, 'userid' => $this->user->id]
         );
     }
@@ -71,13 +73,6 @@ class snips_test extends \advanced_testcase {
         global $DB;
 
         $time = time();
-
-        // $cm = get_coursemodule_from_instance('snippet', $snippet->id);
-        // $this->assertEquals($snippet->id, $cm->instance);
-        // $this->assertEquals('snippet', $cm->modname);
-
-        // $context = \context_module::instance($cm->id);
-        // $this->assertEquals($snippet->cmid, $context->instanceid);
 
         $snipdata = new \stdClass();
         $snipdata->id = $this->snippet->cmid;
@@ -148,11 +143,8 @@ class snips_test extends \advanced_testcase {
 
         $time = time();
 
-        $generator = $this->getDataGenerator();
-        $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
-
         // Create one more category.
-        $category2id = $snippetgenerator->create_category(
+        $category2id = $this->snippetgenerator->create_category(
             ['snippetid' => $this->snippet->id, 'userid' => $this->user->id]
         );
         $this->assertEquals(1, $DB->count_records('snippet_categories', ['id' => $category2id]));
@@ -207,15 +199,15 @@ class snips_test extends \advanced_testcase {
     }
 
     public function test_get_snip_count_for_category() {
-        global $DB;
 
-        $generator = $this->getDataGenerator();
-        $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
-
-        $snipparam = ['categoryid' => $this->categoryid, 'userid' => $this->user->id, 'snippetid' => $this->snippet->id];
-        $snippetgenerator->create_snip($snipparam);
-        $snippetgenerator->create_snip($snipparam);
-        $snippetgenerator->create_snip($snipparam);
+        $snipparam = [
+            'categoryid' => $this->categoryid,
+            'userid' => $this->user->id,
+            'snippetid' => $this->snippet->id
+        ];
+        $this->snippetgenerator->create_snip($snipparam);
+        $this->snippetgenerator->create_snip($snipparam);
+        $this->snippetgenerator->create_snip($snipparam);
 
         $numsnip = snips::get_snip_count_for_category($this->user->id, $this->categoryid);
         $this->assertIsInt($numsnip);
@@ -223,15 +215,11 @@ class snips_test extends \advanced_testcase {
     }
 
     public function test_get_latest_snips() {
-        global $DB;
-
-        $generator = $this->getDataGenerator();
-        $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create 15 snips.
         $snipparam = ['categoryid' => $this->categoryid, 'userid' => $this->user->id, 'snippetid' => $this->snippet->id];
         for ($i = 0; $i < 15; $i++) {
-            $snippetgenerator->create_snip($snipparam);
+            $this->snippetgenerator->create_snip($snipparam);
         }
 
         $latestsnip = snips::get_latest_snips($this->user->id, 5);
@@ -249,22 +237,18 @@ class snips_test extends \advanced_testcase {
      * Get all the snips for a given user in a given category.
      */
     public function test_get_snips_for_category() {
-        global $DB;
-
-        $generator = $this->getDataGenerator();
-        $snippetgenerator = $generator->get_plugin_generator('mod_snippet');
 
         // Create 5 snips.
         $snipparam = ['categoryid' => $this->categoryid, 'userid' => $this->user->id, 'snippetid' => $this->snippet->id];
         for ($i = 0; $i < 5; $i++) {
-            $snippetgenerator->create_snip($snipparam);
+            $this->snippetgenerator->create_snip($snipparam);
         }
 
         $snipsincat = snips::get_snips_for_category($this->user->id, $this->categoryid);
         $this->assertEquals(5, count($snipsincat));
 
         for ($i = 0; $i < 3; $i++) {
-            $snippetgenerator->create_snip($snipparam);
+            $this->snippetgenerator->create_snip($snipparam);
         }
         $snipsincat = snips::get_latest_snips($this->user->id);
         $this->assertEquals(8, count($snipsincat));
